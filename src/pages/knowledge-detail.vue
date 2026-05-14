@@ -14,7 +14,7 @@
         <view class="main-column">
           <view class="section intro-section">
             <text class="section-title">条目定位</text>
-            <text class="section-text">{{ item.title }}在本知识库中对应“{{ category.name }}”维度，可用于连接真实馆藏、课堂鉴赏和“灵感琢玉”页面的参数化设计。阅读时建议先看右侧大图，判断材质光泽、形制轮廓和主题表达，再回到文字部分理解它为什么适合作为本条目的代表图。</text>
+            <text class="section-text">{{ item.title }}在本知识库中对应“{{ category.name }}”维度，可用于连接真实馆藏、作品鉴赏和“灵感琢玉”页面的参数化设计。阅读时建议先看右侧大图，判断材质光泽、形制轮廓和主题表达，再回到文字部分理解它为什么适合作为本条目的代表图。</text>
           </view>
 
           <view class="section lead-section">
@@ -54,11 +54,6 @@
                 </view>
               </view>
             </view>
-          </view>
-
-          <view class="section">
-            <text class="section-title">课堂表达</text>
-            <text class="section-text">{{ item.presentation }}</text>
           </view>
         </view>
 
