@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 620">
+  <defs>
+    <radialGradient id="jade" cx="35%" cy="24%" r="72%">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset=".48" stop-color="#d8fbf7"/>
+      <stop offset="1" stop-color="#8ccbc4"/>
+    </radialGradient>
+    <filter id="soft"><feDropShadow dx="0" dy="18" stdDeviation="16" flood-color="#446b67" flood-opacity=".2"/></filter>
+  </defs>
+  <rect width="800" height="620" fill="#f4f0e7"/>
+  <path d="M400 64c124 0 224 101 224 226 0 142-124 214-224 258-100-44-224-116-224-258 0-125 100-226 224-226z" fill="url(#jade)" filter="url(#soft)"/>
+  <ellipse cx="345" cy="135" rx="72" ry="24" fill="#fff" opacity=".66" transform="rotate(-24 345 135)"/>
+  <path d="M400 405c-76-92-50-178 0-238 50 60 76 146 0 238z" fill="none" stroke="#5caea5" stroke-width="16" stroke-linecap="round"/>
+  <path d="M398 406c-122-54-124-152-88-221 72 31 118 95 88 221z" fill="none" stroke="#7dc7bf" stroke-width="14" stroke-linecap="round"/>
+  <path d="M402 406c122-54 124-152 88-221-72 31-118 95-88 221z" fill="none" stroke="#7dc7bf" stroke-width="14" stroke-linecap="round"/>
+  <path d="M295 390c67 34 143 38 210 0" fill="none" stroke="#5caea5" stroke-width="14" stroke-linecap="round"/>
+  <circle cx="400" cy="300" r="26" fill="#efffff" stroke="#5caea5" stroke-width="8"/>
+  <circle cx="391" cy="292" r="4" fill="#5caea5"/><circle cx="408" cy="292" r="4" fill="#5caea5"/><circle cx="400" cy="309" r="4" fill="#5caea5"/>
+</svg>

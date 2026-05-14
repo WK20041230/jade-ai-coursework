@@ -1,0 +1,40 @@
+{
+  "pages": [
+    {
+      "path": "pages/index/index",
+      "style": {
+        "navigationBarTitleText": "玉语 AI"
+      }
+    },
+    {
+      "path": "pages/design",
+      "style": {
+        "navigationBarTitleText": "灵感琢玉"
+      }
+    },
+    {
+      "path": "pages/knowledge",
+      "style": {
+        "navigationBarTitleText": "玉石知识库"
+      }
+    },
+    {
+      "path": "pages/knowledge-detail",
+      "style": {
+        "navigationBarTitleText": "知识详情"
+      }
+    },
+    {
+      "path": "pages/report",
+      "style": {
+        "navigationBarTitleText": "鉴赏报告"
+      }
+    }
+  ],
+  "globalStyle": {
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "玉语 AI",
+    "navigationBarBackgroundColor": "#F6F4EF",
+    "backgroundColor": "#F6F4EF"
+  }
+}

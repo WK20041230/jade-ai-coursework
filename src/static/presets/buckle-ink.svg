@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 620">
+  <defs>
+    <radialGradient id="jade" cx="35%" cy="22%" r="70%">
+      <stop offset="0" stop-color="#5b6b66"/>
+      <stop offset=".48" stop-color="#1e2a27"/>
+      <stop offset="1" stop-color="#050707"/>
+    </radialGradient>
+    <filter id="soft"><feDropShadow dx="0" dy="20" stdDeviation="20" flood-color="#000" flood-opacity=".28"/></filter>
+  </defs>
+  <rect width="800" height="620" fill="#f4f0e7"/>
+  <circle cx="400" cy="310" r="214" fill="url(#jade)" filter="url(#soft)"/>
+  <circle cx="400" cy="310" r="82" fill="#f4f0e7"/>
+  <circle cx="400" cy="310" r="94" fill="none" stroke="#66716c" stroke-width="16" opacity=".5"/>
+  <circle cx="400" cy="310" r="196" fill="none" stroke="#6b7771" stroke-width="12" opacity=".45"/>
+  <ellipse cx="335" cy="160" rx="82" ry="24" fill="#fff" opacity=".24" transform="rotate(-23 335 160)"/>
+  <path d="M265 420c87 46 184 46 270 0" fill="none" stroke="#8a928e" stroke-width="12" stroke-linecap="round" opacity=".36"/>
+</svg>
