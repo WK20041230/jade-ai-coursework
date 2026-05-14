@@ -4,101 +4,45 @@
       <view class="hero-copy">
         <text class="eyebrow">作品成果整理</text>
         <text class="title">作品档案</text>
-        <text class="subtitle">把“灵感琢玉”的参数化结果整理成一份可阅读、可提交的设计说明。</text>
+        <text class="subtitle">以作品图为中心，把 AI 玉器方案整理成可阅读、可提交的设计说明。</text>
       </view>
-      <view class="hero-stat">
-        <text class="stat-num">144</text>
-        <text class="stat-label">本地 AI 玉器方案</text>
-      </view>
+      <button class="hero-action" @tap="openSelector">打开作品库</button>
     </view>
 
-    <view class="workspace">
-      <view class="control-panel">
+    <view class="showcase">
+      <view class="art-stage" @tap="openSelector">
+        <image class="work-image" :src="assetPath" mode="aspectFit" />
+        <view class="stage-hint">
+          <text>点击图片更换作品</text>
+        </view>
+      </view>
+
+      <view class="side-panel">
         <view class="panel-head">
-          <text class="panel-title">生成档案</text>
-          <text class="panel-note">选择一个方案，形成完整作品说明</text>
+          <text class="panel-kicker">Selected Work</text>
+          <text class="panel-title">{{ archiveName }}</text>
+        </view>
+
+        <view class="tag-row">
+          <text class="tag">{{ selectedMaterial.name }}</text>
+          <text class="tag">{{ selectedForm.name }}</text>
+          <text class="tag">{{ selectedTheme.name }}</text>
+          <text class="tag">{{ selectedSubject.name }}</text>
         </view>
 
         <view class="form-group">
           <text class="label">作品名称</text>
-          <input class="input" v-model="form.name" placeholder="例如：南红玛瑙莲花玉佩" />
-        </view>
-
-        <view class="choice-section">
-          <text class="label">材质</text>
-          <view class="choice-grid four">
-            <button
-              v-for="(material, index) in materials"
-              :key="material.name"
-              class="choice-btn"
-              :class="{ active: materialIndex === index }"
-              @tap="chooseMaterial(index)"
-            >
-              {{ material.name }}
-            </button>
-          </view>
-        </view>
-
-        <view class="choice-section">
-          <text class="label">样式</text>
-          <view class="choice-grid three">
-            <button
-              v-for="(formOption, index) in forms"
-              :key="formOption.name"
-              class="choice-btn"
-              :class="{ active: formIndex === index }"
-              @tap="chooseForm(index)"
-            >
-              {{ formOption.name }}
-            </button>
-          </view>
-        </view>
-
-        <view class="choice-section">
-          <text class="label">主题</text>
-          <view class="choice-grid four">
-            <button
-              v-for="(theme, index) in themes"
-              :key="theme.name"
-              class="choice-btn"
-              :class="{ active: themeIndex === index }"
-              @tap="chooseTheme(index)"
-            >
-              {{ theme.name }}
-            </button>
-          </view>
-        </view>
-
-        <view class="choice-section">
-          <text class="label">小题材</text>
-          <view class="choice-grid three">
-            <button
-              v-for="(subject, index) in selectedTheme.subjects"
-              :key="subject.name"
-              class="choice-btn subject-btn"
-              :class="{ active: subjectIndex === index }"
-              @tap="chooseSubject(index)"
-            >
-              {{ subject.name }}
-            </button>
-          </view>
+          <input class="input" v-model="form.name" placeholder="为当前作品命名" />
         </view>
 
         <view class="form-group">
           <text class="label">补充说明</text>
-          <textarea class="textarea" v-model="form.note" placeholder="可以补充你想强调的设计想法、使用场景或个人偏好。" />
+          <textarea class="textarea" v-model="form.note" placeholder="补充你想强调的设计想法、使用场景或个人偏好。" />
         </view>
 
-        <button class="btn" @tap="makeArchive">生成作品档案</button>
-      </view>
-
-      <view class="preview-panel">
-        <view class="image-wrap">
-          <image class="work-image" :src="assetPath" mode="aspectFit" />
-        </view>
-        <view class="preview-meta">
-          <text class="meta-title">{{ archiveName }}</text>
-          <text class="meta-desc">{{ selectedMaterial.feature }} · {{ selectedForm.note }} · {{ selectedTheme.note }}</text>
+        <view class="action-row">
+          <button class="ghost-btn" @tap="openSelector">更换作品</button>
+          <button class="primary-btn" @tap="makeArchive">生成档案</button>
         </view>
       </view>
     </view>
@@ -109,7 +53,7 @@
           <text class="archive-kicker">Design Archive</text>
           <text class="archive-title">{{ archiveName }}</text>
         </view>
-        <text class="archive-badge">{{ selectedMaterial.name }}</text>
+        <text class="archive-badge">{{ selectedMaterial.feature }}</text>
       </view>
 
       <view class="archive-grid">
@@ -132,6 +76,60 @@
       <view class="section">
         <text class="section-title">AI 创新点</text>
         <text class="section-text">{{ archive.innovation }}</text>
+      </view>
+    </view>
+
+    <view v-if="selectorOpen" class="selector-mask" @tap="closeSelector">
+      <view class="selector" @tap.stop>
+        <view class="selector-head">
+          <view>
+            <text class="selector-title">作品库</text>
+            <text class="selector-note">先切换材质和样式，再从 12 张作品中选择。</text>
+          </view>
+          <button class="close-btn" @tap="closeSelector">×</button>
+        </view>
+
+        <view class="filter-row">
+          <button
+            v-for="(material, index) in materials"
+            :key="material.name"
+            class="filter-btn"
+            :class="{ active: materialIndex === index }"
+            @tap="chooseMaterial(index)"
+          >
+            {{ material.name }}
+          </button>
+        </view>
+
+        <view class="filter-row compact">
+          <button
+            v-for="(formOption, index) in forms"
+            :key="formOption.name"
+            class="filter-btn"
+            :class="{ active: formIndex === index }"
+            @tap="chooseForm(index)"
+          >
+            {{ formOption.name }}
+          </button>
+        </view>
+
+        <scroll-view class="gallery-scroll" scroll-y>
+          <view class="gallery-grid">
+            <view
+              v-for="item in galleryItems"
+              :key="item.key"
+              class="gallery-card"
+              :class="{ active: item.themeIndex === themeIndex && item.subjectIndex === subjectIndex }"
+              @tap="selectGalleryItem(item)"
+            >
+              <image class="gallery-image" :src="item.src" mode="aspectFill" />
+              <view class="gallery-copy">
+                <text class="gallery-name">{{ item.subject.name }}</text>
+                <text class="gallery-theme">{{ item.theme.name }}</text>
+              </view>
+            </view>
+          </view>
+        </scroll-view>
       </view>
     </view>
   </view>
@@ -165,6 +163,15 @@ type Theme = {
   slug: string;
   note: string;
   subjects: Subject[];
+};
+
+type GalleryItem = {
+  key: string;
+  src: string;
+  theme: Theme;
+  subject: Subject;
+  themeIndex: number;
+  subjectIndex: number;
 };
 
 const localAsset = (path: string) => `${import.meta.env.BASE_URL}${path}`;
@@ -229,6 +236,7 @@ const materialIndex = ref(3);
 const formIndex = ref(1);
 const themeIndex = ref(0);
 const subjectIndex = ref(0);
+const selectorOpen = ref(false);
 const archive = ref<{ design: string; tradition: string; innovation: string } | null>(null);
 
 const form = reactive({
@@ -241,8 +249,9 @@ const selectedForm = computed(() => forms[formIndex.value]);
 const selectedTheme = computed(() => themes[themeIndex.value]);
 const selectedSubject = computed(() => selectedTheme.value.subjects[subjectIndex.value]);
 
-const archiveName = computed(() => form.name.trim() || `${selectedMaterial.value.name}${selectedSubject.value.name}${selectedForm.value.name}`);
-const assetPath = computed(() => localAsset(`static/generated/material-core/${selectedMaterial.value.slug}-${selectedForm.value.slug}-${selectedTheme.value.slug}-${selectedSubject.value.slug}.jpg`));
+const archiveName = computed(() => form.name.trim() || comboName.value);
+const comboName = computed(() => `${selectedMaterial.value.name}${selectedSubject.value.name}${selectedForm.value.name}`);
+const assetPath = computed(() => makeAssetPath(selectedTheme.value, selectedSubject.value));
 
 const archiveItems = computed(() => [
   { label: '材质', value: `${selectedMaterial.value.name}：${selectedMaterial.value.feature}` },
@@ -251,29 +260,45 @@ const archiveItems = computed(() => [
   { label: '题材', value: `${selectedSubject.value.name}：${selectedSubject.value.symbol}` }
 ]);
 
-const refreshArchive = () => {
-  makeArchive(false);
+const galleryItems = computed<GalleryItem[]>(() =>
+  themes.flatMap((theme, tIndex) =>
+    theme.subjects.map((subject, sIndex) => ({
+      key: `${theme.slug}-${subject.slug}`,
+      src: makeAssetPath(theme, subject),
+      theme,
+      subject,
+      themeIndex: tIndex,
+      subjectIndex: sIndex
+    }))
+  )
+);
+
+function makeAssetPath(theme: Theme, subject: Subject) {
+  return localAsset(`static/generated/material-core/${selectedMaterial.value.slug}-${selectedForm.value.slug}-${theme.slug}-${subject.slug}.jpg`);
+}
+
+const openSelector = () => {
+  selectorOpen.value = true;
+};
+
+const closeSelector = () => {
+  selectorOpen.value = false;
 };
 
 const chooseMaterial = (index: number) => {
   materialIndex.value = index;
-  refreshArchive();
 };
 
 const chooseForm = (index: number) => {
   formIndex.value = index;
-  refreshArchive();
 };
 
-const chooseTheme = (index: number) => {
-  themeIndex.value = index;
-  subjectIndex.value = 0;
-  refreshArchive();
-};
-
-const chooseSubject = (index: number) => {
-  subjectIndex.value = index;
-  refreshArchive();
+const selectGalleryItem = (item: GalleryItem) => {
+  themeIndex.value = item.themeIndex;
+  subjectIndex.value = item.subjectIndex;
+  form.name = comboName.value;
+  makeArchive(false);
+  closeSelector();
 };
 
 const makeArchive = (showToast = true) => {
@@ -288,7 +313,7 @@ const makeArchive = (showToast = true) => {
   }
 };
 
-makeArchive();
+makeArchive(false);
 </script>
 
 <style scoped>
@@ -301,16 +326,24 @@ makeArchive();
   box-sizing: border-box;
 }
 
-.hero {
+.hero,
+.showcase,
+.archive {
   max-width: 1180px;
-  margin: 0 auto 28rpx;
-  padding: 38rpx 42rpx;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.hero {
+  margin-bottom: 24rpx;
+  padding: 34rpx 38rpx;
   border-radius: 18rpx;
   background: #173f36;
   color: #fff;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 24rpx;
   box-shadow: 0 18rpx 46rpx rgba(31, 70, 62, 0.16);
 }
 
@@ -320,9 +353,9 @@ makeArchive();
 }
 
 .eyebrow {
-  font-size: 22rpx;
   color: #dfc58f;
-  font-weight: 700;
+  font-size: 22rpx;
+  font-weight: 800;
 }
 
 .title {
@@ -334,119 +367,109 @@ makeArchive();
 
 .subtitle {
   margin-top: 14rpx;
+  color: rgba(255, 255, 255, 0.84);
   font-size: 26rpx;
   line-height: 1.6;
-  color: rgba(255, 255, 255, 0.84);
 }
 
-.hero-stat {
-  width: 180rpx;
-  height: 150rpx;
-  border-radius: 12rpx;
-  background: rgba(255, 255, 255, 0.1);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  flex: 0 0 180rpx;
+.hero-action,
+.primary-btn,
+.ghost-btn {
+  height: 76rpx;
+  border-radius: 999rpx;
+  font-size: 26rpx;
+  font-weight: 800;
+  line-height: 76rpx;
 }
 
-.stat-num {
-  font-size: 48rpx;
-  font-weight: 900;
+.hero-action {
+  width: 190rpx;
+  flex: 0 0 190rpx;
+  background: #dfc58f;
+  color: #173f36;
 }
 
-.stat-label {
-  margin-top: 6rpx;
-  font-size: 20rpx;
-  color: rgba(255, 255, 255, 0.76);
-}
-
-.workspace,
-.archive {
-  max-width: 1180px;
-  margin: 0 auto;
-}
-
-.workspace {
+.showcase {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 430rpx;
+  grid-template-columns: minmax(0, 1.18fr) minmax(360rpx, 0.82fr);
   gap: 24rpx;
-  align-items: start;
+  align-items: stretch;
 }
 
-.control-panel,
-.preview-panel,
-.archive {
-  border-radius: 14rpx;
+.art-stage,
+.side-panel,
+.archive,
+.selector {
+  border-radius: 16rpx;
   background: #fff;
   box-shadow: 0 12rpx 32rpx rgba(44, 53, 48, 0.08);
 }
 
-.control-panel {
+.art-stage {
+  position: relative;
+  min-height: 650rpx;
+  overflow: hidden;
+  background: #e9e2d5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.work-image {
+  width: 100%;
+  height: 650rpx;
+  display: block;
+}
+
+.stage-hint {
+  position: absolute;
+  left: 28rpx;
+  bottom: 28rpx;
+  padding: 12rpx 18rpx;
+  border-radius: 999rpx;
+  background: rgba(23, 63, 54, 0.88);
+  color: #fff;
+  font-size: 22rpx;
+}
+
+.side-panel {
   padding: 30rpx;
 }
 
-.panel-head {
-  margin-bottom: 24rpx;
+.panel-kicker {
+  display: block;
+  color: #9a7437;
+  font-size: 22rpx;
+  font-weight: 800;
 }
 
 .panel-title {
   display: block;
+  margin-top: 8rpx;
   color: #1f302b;
-  font-size: 34rpx;
+  font-size: 38rpx;
+  line-height: 1.2;
   font-weight: 900;
 }
 
-.panel-note {
-  display: block;
-  margin-top: 8rpx;
-  color: #68736d;
-  font-size: 24rpx;
+.tag-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10rpx;
+  margin: 20rpx 0 26rpx;
+}
+
+.tag {
+  padding: 8rpx 14rpx;
+  border-radius: 8rpx;
+  background: #e8f2ed;
+  color: #1f6b5b;
+  font-size: 22rpx;
+  font-weight: 700;
 }
 
 .form-group {
   margin-bottom: 22rpx;
-}
-
-.choice-section {
-  margin-bottom: 22rpx;
-}
-
-.choice-grid {
-  display: grid;
-  gap: 12rpx;
-}
-
-.choice-grid.four {
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-}
-
-.choice-grid.three {
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-}
-
-.choice-btn {
-  height: 70rpx;
-  padding: 0 10rpx;
-  border-radius: 10rpx;
-  border: 1px solid #e6dfd2;
-  background: #fbfaf7;
-  color: #3c4b45;
-  font-size: 23rpx;
-  line-height: 70rpx;
-  font-weight: 700;
-  text-align: center;
-}
-
-.choice-btn.active {
-  border-color: #1f6b5b;
-  background: #1f6b5b;
-  color: #fff;
-}
-
-.subject-btn {
-  font-size: 22rpx;
 }
 
 .label {
@@ -471,60 +494,28 @@ makeArchive();
 .input {
   min-height: 78rpx;
   padding: 0 20rpx;
-  display: flex;
-  align-items: center;
 }
 
 .textarea {
-  min-height: 160rpx;
+  min-height: 210rpx;
   padding: 18rpx 20rpx;
   line-height: 1.6;
 }
 
-.btn {
-  height: 84rpx;
-  border-radius: 999rpx;
+.action-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14rpx;
+}
+
+.ghost-btn {
+  background: #f7f4ec;
+  color: #1f6b5b;
+}
+
+.primary-btn {
   background: #1f6b5b;
   color: #fff;
-  font-size: 28rpx;
-  font-weight: 800;
-}
-
-.preview-panel {
-  overflow: hidden;
-}
-
-.image-wrap {
-  height: 430rpx;
-  background: #e8e1d3;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.work-image {
-  width: 100%;
-  height: 100%;
-  display: block;
-}
-
-.preview-meta {
-  padding: 22rpx;
-}
-
-.meta-title {
-  display: block;
-  color: #20312c;
-  font-size: 30rpx;
-  font-weight: 900;
-}
-
-.meta-desc {
-  display: block;
-  margin-top: 10rpx;
-  color: #68736d;
-  font-size: 23rpx;
-  line-height: 1.55;
 }
 
 .archive {
@@ -616,17 +607,152 @@ makeArchive();
   text-align: justify;
 }
 
-@media screen and (max-width: 860px) {
-  .workspace {
-    grid-template-columns: 1fr;
-  }
+.selector-mask {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  padding: 36rpx;
+  background: rgba(17, 29, 25, 0.52);
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
+.selector {
+  width: min(1180px, 100%);
+  max-height: 88vh;
+  padding: 28rpx;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+}
+
+.selector-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 20rpx;
+  align-items: flex-start;
+  margin-bottom: 22rpx;
+}
+
+.selector-title {
+  display: block;
+  color: #1f302b;
+  font-size: 34rpx;
+  font-weight: 900;
+}
+
+.selector-note {
+  display: block;
+  margin-top: 8rpx;
+  color: #68736d;
+  font-size: 23rpx;
+}
+
+.close-btn {
+  width: 64rpx;
+  height: 64rpx;
+  border-radius: 50%;
+  background: #f7f4ec;
+  color: #1f302b;
+  font-size: 34rpx;
+  line-height: 64rpx;
+}
+
+.filter-row {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12rpx;
+  margin-bottom: 12rpx;
+}
+
+.filter-row.compact {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin-bottom: 20rpx;
+}
+
+.filter-btn {
+  height: 68rpx;
+  border-radius: 10rpx;
+  border: 1px solid #e6dfd2;
+  background: #fbfaf7;
+  color: #3c4b45;
+  font-size: 23rpx;
+  font-weight: 800;
+  line-height: 68rpx;
+}
+
+.filter-btn.active {
+  border-color: #1f6b5b;
+  background: #1f6b5b;
+  color: #fff;
+}
+
+.gallery-scroll {
+  max-height: 56vh;
+}
+
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16rpx;
+  padding-bottom: 4rpx;
+}
+
+.gallery-card {
+  overflow: hidden;
+  border-radius: 12rpx;
+  border: 2rpx solid transparent;
+  background: #f7f4ec;
+}
+
+.gallery-card.active {
+  border-color: #1f6b5b;
+}
+
+.gallery-image {
+  width: 100%;
+  height: 230rpx;
+  display: block;
+  background: #e8e1d3;
+}
+
+.gallery-copy {
+  padding: 14rpx 16rpx 16rpx;
+}
+
+.gallery-name {
+  display: block;
+  color: #20312c;
+  font-size: 24rpx;
+  font-weight: 900;
+}
+
+.gallery-theme {
+  display: block;
+  margin-top: 4rpx;
+  color: #9a7437;
+  font-size: 20rpx;
+}
+
+@media screen and (max-width: 860px) {
+  .showcase,
   .archive-grid {
     grid-template-columns: 1fr;
   }
 
-  .choice-grid.four,
-  .choice-grid.three {
+  .art-stage {
+    min-height: 520rpx;
+  }
+
+  .work-image {
+    height: 520rpx;
+  }
+
+  .filter-row,
+  .filter-row.compact,
+  .gallery-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
@@ -634,10 +760,15 @@ makeArchive();
 @media screen and (max-width: 420px) {
   .hero {
     align-items: flex-start;
+    flex-direction: column;
   }
 
-  .hero-stat {
-    display: none;
+  .hero-action {
+    width: 100%;
+  }
+
+  .selector-mask {
+    padding: 20rpx;
   }
 }
 </style>
