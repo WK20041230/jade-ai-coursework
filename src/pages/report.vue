@@ -250,6 +250,7 @@ const themeIndex = ref(0);
 const subjectIndex = ref(0);
 const selectorOpen = ref(false);
 const archive = ref<{ design: string; tradition: string; innovation: string } | null>(null);
+const archiveVersion = ref(0);
 
 const form = reactive({
   name: '南红玛瑙莲花玉佩',
@@ -271,6 +272,74 @@ const archiveItems = computed(() => [
   { label: '主题', value: `${selectedTheme.value.name}：${selectedTheme.value.note}` },
   { label: '题材', value: `${selectedSubject.value.name}：${selectedSubject.value.symbol}` }
 ]);
+
+const materialDetail = computed(() => {
+  const details: Record<string, string> = {
+    'mutton-white': '羊脂白玉的重点在“白而不僵、润而不腻”，因此分析时应关注高光是否柔和、边缘过渡是否细腻，以及白色材质是否支撑作品的安静气质。',
+    'green-jade': '和田青玉不以强透明取胜，而以沉稳色调和古雅气息见长。分析时可以把重点放在山石感、厚重感、留白关系和仿古气质上。',
+    'ice-jade': '冰种翡翠强调清透、水头和光感，图像中的透明边缘、浅色底子和局部起光都会影响作品是否显得轻盈干净。',
+    'red-agate': '南红玛瑙的识别点在温暖红色、胶质感和天然色带。分析时要看红色是否饱满但不过度塑料化，雕刻题材是否借助红色增强吉祥或守护意味。'
+  };
+  return details[selectedMaterial.value.slug];
+});
+
+const formDetail = computed(() => {
+  const details: Record<string, string> = {
+    diaozhui: '吊坠尺度较小，作品需要在有限面积内完成题材识别，因此孔位、轮廓和主体图案必须足够清楚，避免细节过碎。',
+    yupei: '玉佩更适合正面叙事，边框、主纹样和留白之间的关系会决定画面是否端正，也决定它能否作为完整作品被独立观看。',
+    shouzhuo: '手镯属于环形佩戴器，图案需要沿着弧面延展。它的难点不只是单面好看，还要让纹样在转动观看时保持连续和节奏。'
+  };
+  return details[selectedForm.value.slug];
+});
+
+const themeDetail = computed(() => {
+  const details: Record<string, string> = {
+    huahui: '花鸟鱼虫类题材适合表现生命感和吉祥寓意，画面通常依靠曲线、花叶、水纹或动物动态形成柔和节奏。',
+    myth: '神话故事类题材更强调人物识别和精神气势，需要通过姿态、衣纹、器物和面部特征来建立叙事感。',
+    landscape: '山水意境类题材重在空间层次与留白，远近关系、云水走向和山石节奏会直接影响作品是否具有文人气息。',
+    modern: '现代极简类题材减少叙事细节，更考验比例、边缘、孔位和几何秩序，适合体现传统玉器向当代首饰语言的转译。'
+  };
+  return details[selectedTheme.value.slug];
+});
+
+const subjectDetail = computed(() => {
+  const details: Record<string, string> = {
+    lotus: '莲花的重点不是单朵花本身，而是花瓣、莲叶和水意之间的层次。它适合表达清雅、洁净，也适合与白玉、翡翠等清润材质结合。',
+    koi: '锦鲤题材依靠鱼身曲线和水纹动势成立，适合表达顺遂、富足和流动的生命力。',
+    bamboo: '竹叶题材需要线条疏密有度，竹节与叶片的方向能带出清劲、克制和文人气质。',
+    zhongkui: '钟馗题材需要力量感和辨识度，面部、须发和衣纹都要服务于镇邪纳福的守护意味。',
+    guanyin: '观音题材更看重端庄、慈悲和安定感，面相、手势和衣纹不能过于躁动。',
+    nezha: '哪吒题材适合动态表现，飘带、武器和少年姿态可以强化勇气、突破与活力。',
+    'mountain-cloud': '远山云水依靠远近层叠和云气留白成立，适合表现开阔、含蓄的东方空间。',
+    'pine-stream': '松石溪流强调松、石、溪三者的节奏关系，适合表达坚贞、清流和山居意境。',
+    'lonely-boat': '孤舟听雨题材更重情绪，少量元素就能形成静谧感，留白和雨线比繁复细节更重要。',
+    'peace-buckle': '平安扣以外圆内孔为核心，比例端正、孔位居中和边缘圆润是判断重点。',
+    waterdrop: '水滴形强调流线、轻盈和向下收束的轮廓，适合突出材质的清润感。',
+    'square-circle': '方圆结合依靠几何秩序形成现代感，重点是方与圆的比例、对称和视觉稳定。'
+  };
+  return details[selectedSubject.value.slug];
+});
+
+const reportAngles = [
+  {
+    name: '材质观察',
+    design: '本次档案更偏向从材质观察进入作品：',
+    tradition: '从传统玉器观看方式看，材质从来不是背景，而是决定题材如何成立的前提。',
+    innovation: 'AI 生成在这一角度下的价值，是快速比较不同材质对同一题材气质的改变。'
+  },
+  {
+    name: '造型叙事',
+    design: '本次档案更偏向从造型叙事进入作品：',
+    tradition: '传统玉器中的器型与纹样往往互相制约，题材必须服从佩戴、陈设或把玩的形制。',
+    innovation: 'AI 生成在这一角度下的价值，是把题材、形制和构图快速组合成可视化草案。'
+  },
+  {
+    name: '网页呈现',
+    design: '本次档案更偏向从网页呈现进入作品：',
+    tradition: '当传统玉器进入数字页面时，观众首先接触的是图像、标题和说明之间的关系。',
+    innovation: 'AI 生成在这一角度下的价值，是让作品不仅能被观看，还能被归档、筛选和重新组织。'
+  }
+];
 
 const galleryItems = computed<GalleryItem[]>(() =>
   themes.flatMap((theme, tIndex) =>
@@ -318,11 +387,15 @@ const selectGalleryItem = (item: GalleryItem) => {
 };
 
 const makeArchive = (showToast = true) => {
+  if (showToast) {
+    archiveVersion.value += 1;
+  }
   const note = form.note.trim();
+  const angle = reportAngles[archiveVersion.value % reportAngles.length];
   archive.value = {
-    design: `${archiveName.value}以${selectedMaterial.value.name}为主要材质，采用${selectedForm.value.name}形制，题材选择“${selectedSubject.value.name}”。材质上，${selectedMaterial.value.design}因此作品的第一视觉不只是颜色，而是由光泽、透明度、厚薄关系和表面抛光共同形成的玉质感。造型上，${selectedForm.value.craft}这决定了画面不能只追求装饰堆叠，还需要兼顾佩戴结构、观看重心和边缘处理。题材上，${selectedSubject.value.symbol}在作品档案中，这一方案可以被理解为“材质特征 + 传统题材 + 当代图像生成”的组合实验。${note ? `补充设想是：${note}` : ''}`,
-    tradition: `${selectedTheme.value.name}为作品提供了清晰的文化语义，${selectedSubject.value.name}则提供了可识别的图像核心。传统玉器并不只是把纹样刻在材料表面，而是会根据玉料的颜色、润度、透明度和形制来调整题材表达；例如温润材质更适合含蓄柔和的线面，色彩鲜明的材质更适合强调守护、吉祥或节庆气质。这个方案把传统玉器中的材质审美、器型规范和题材寓意拆解为可选择参数，再重新组合成一个具体作品，使观看者能够从“为什么选这种玉、为什么做这种形、为什么用这个题材”三个层面理解它。`,
-    innovation: `AI 在这里不是替代玉雕工艺，而是作为前期视觉预演工具：它可以快速呈现不同材质、样式和题材组合后的视觉效果，帮助比较哪一种方案更有辨识度、更适合网页展示，也更容易形成完整说明。页面使用 144 张本地预生成图像，不依赖实时接口，因此适合离线提交和长期展示。作品档案把 AI 图像、传统依据、材质说明和设计意图放在同一页面中，使结果不只是单张图片，而是一个可以被阅读、比较和归档的数字玉器设计方案。`
+    design: `${angle.design}${archiveName.value}以${selectedMaterial.value.name}为主要材质，采用${selectedForm.value.name}形制，题材选择“${selectedSubject.value.name}”。${materialDetail.value}${formDetail.value}${subjectDetail.value}因此这件作品的分析重点不是单纯判断“像不像玉”，而是看材质语言、题材寓意和形制功能是否互相支持。${note ? `补充设想是：${note}` : ''}`,
+    tradition: `${angle.tradition}${selectedTheme.value.name}为作品提供了文化语义，${selectedSubject.value.name}提供了图像核心。${themeDetail.value}${subjectDetail.value}如果把它放回传统玉器系统中理解，它既可以对应佩饰、陈设或把玩器的审美传统，也能说明玉器题材并不是孤立符号，而是由材质、器型、工艺和寓意共同构成。`,
+    innovation: `${angle.innovation}这个作品档案把 AI 图像、参数组合和文字说明放在同一页面中，形成“选择作品 - 生成档案 - 阅读依据”的流程。与单张 AI 图片相比，它更强调可解释性：用户能看到作品为什么采用${selectedMaterial.value.name}，为什么适合${selectedForm.value.name}，以及${selectedSubject.value.name}如何连接到${selectedTheme.value.name}。页面使用本地预生成图像，不依赖实时接口，因此适合离线提交和长期展示；同时，不同作品会生成不同分析文本，避免所有档案只套用同一段说明。`
   };
   if (showToast) {
     uni.showToast({ title: '档案已生成', icon: 'success' });
@@ -660,6 +733,7 @@ const makeArchive = (showToast = true) => {
 }
 
 .selector {
+  position: relative;
   width: min(1180px, 100%);
   max-height: 94vh;
   padding: 28rpx;
@@ -674,6 +748,7 @@ const makeArchive = (showToast = true) => {
   gap: 20rpx;
   align-items: flex-start;
   margin-bottom: 22rpx;
+  padding-right: 76rpx;
 }
 
 .selector-title {
@@ -691,8 +766,13 @@ const makeArchive = (showToast = true) => {
 }
 
 .close-btn {
+  position: absolute;
+  top: 28rpx;
+  right: 28rpx;
   width: 64rpx;
   height: 64rpx;
+  margin: 0;
+  padding: 0;
   border-radius: 50%;
   background: #f7f4ec;
   color: #1f302b;
@@ -725,20 +805,24 @@ const makeArchive = (showToast = true) => {
 }
 
 .filter-options {
-  display: grid;
+  display: flex;
+  flex-wrap: wrap;
   gap: 10rpx;
 }
 
 .material-options {
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  justify-content: flex-start;
 }
 
 .form-options {
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  justify-content: flex-start;
 }
 
 .filter-btn {
   height: 62rpx;
+  min-width: 132rpx;
+  margin: 0;
+  padding: 0 22rpx;
   border-radius: 999rpx;
   border: 1px solid #e6dfd2;
   background: #fff;
@@ -755,7 +839,7 @@ const makeArchive = (showToast = true) => {
 }
 
 .gallery-scroll {
-  max-height: 68vh;
+  max-height: 70vh;
 }
 
 .gallery-grid {
@@ -778,7 +862,7 @@ const makeArchive = (showToast = true) => {
 
 .gallery-image {
   width: 100%;
-  height: 300rpx;
+  height: 330rpx;
   display: block;
   background: #e8e1d3;
 }
@@ -823,9 +907,13 @@ const makeArchive = (showToast = true) => {
     grid-template-columns: 1fr;
   }
 
-  .material-options,
-  .form-options {
+  .filter-options {
+    display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .filter-btn {
+    min-width: 0;
   }
 }
 
