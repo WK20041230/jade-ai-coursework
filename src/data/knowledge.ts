@@ -37,6 +37,7 @@ const cma = 'Cleveland Museum of Art, CC0';
 const met = 'The Metropolitan Museum of Art, Public Domain';
 const lacma = 'Los Angeles County Museum of Art, Public Domain';
 const aic = 'Art Institute of Chicago, Public Domain';
+const localAsset = (path: string) => `${import.meta.env.BASE_URL}${path}`;
 
 const img = (
   src: string,
@@ -46,7 +47,15 @@ const img = (
   source: string,
   sourceUrl: string,
   note?: string
-): KnowledgeImage => ({ src, alt, title, objectInfo, source, sourceUrl, note });
+): KnowledgeImage => ({
+  src: src.startsWith('static/') ? localAsset(src) : src,
+  alt,
+  title,
+  objectInfo,
+  source,
+  sourceUrl,
+  note
+});
 
 export const knowledgeCategories: KnowledgeCategory[] = [
   {

@@ -196,6 +196,8 @@ type Theme = {
   subjects: Subject[];
 };
 
+const localAsset = (path: string) => `${import.meta.env.BASE_URL}${path}`;
+
 const materials: Material[] = [
   { name: '羊脂白玉', feature: '温润凝脂', appraisal: '羊脂白玉以温润、细腻、含蓄为主要审美特征，适合表现柔和圆润的浮雕和传统人物题材。' },
   { name: '和田青玉', feature: '沉静古雅', appraisal: '和田青玉色泽沉稳，气质古朴，适合结合阴刻线、边框纹样和文人化的山水构图。' },
@@ -337,12 +339,12 @@ const getCombinationAssetPath = () => {
   if (!material || !form || !theme || !subject) {
     return '';
   }
-  return 'static/generated/material-core/' + material + '-' + form + '-' + theme + '-' + subject + '.jpg';
+  return localAsset('static/generated/material-core/' + material + '-' + form + '-' + theme + '-' + subject + '.jpg');
 };
 
 const getGeneratedImage = () => {
   const generatedCombinationImage = getCombinationAssetPath();
-  return generatedCombinationImage || selectedSubject.value.image;
+  return generatedCombinationImage || localAsset(selectedSubject.value.image);
 };
 
 const generateScheme = () => {
