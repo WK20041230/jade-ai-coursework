@@ -27,7 +27,7 @@
     {
       "path": "pages/report",
       "style": {
-        "navigationBarTitleText": "鉴赏报告"
+        "navigationBarTitleText": "作品档案"
       }
     }
   ],

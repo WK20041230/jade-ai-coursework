@@ -2,7 +2,7 @@
   <view class="page">
     <view class="header">
       <text class="title">灵感琢玉</text>
-      <text class="subtitle">选择固定参数后，系统会匹配预先由 AI 生成的素材库，并同步生成设计说明、鉴赏角度和课程展示文本。</text>
+      <text class="subtitle">选择固定参数后，系统会匹配预先由 AI 生成的素材库，并同步生成设计说明、鉴赏角度和作品档案文本。</text>
     </view>
 
     <view class="panel">
@@ -362,7 +362,7 @@ const generateScheme = () => {
     generatedScheme.symbol = selectedSubject.value.symbol;
     generatedScheme.craft = selectedForm.value.craft;
     generatedScheme.assetName = `${materialSlugs[selectedMaterial.value.name]}-${formSlugs[selectedForm.value.name]}-${themeSlugs[selectedTheme.value.name]}-${subjectSlugs[selectedSubject.value.name]}.jpg`;
-    generatedScheme.report = `本方案选择${selectedMaterial.value.name}作为材料，设计为${selectedForm.value.name}，创作主题为${selectedTheme.value.name}，小题材聚焦“${selectedSubject.value.name}”。材质上，${selectedMaterial.value.appraisal}题材上，${selectedSubject.value.symbol}工艺上，${selectedForm.value.craft}整体方案适合从材质特征、题材寓意、工艺难点、佩戴或陈设场景四个角度进行课程展示。`;
+    generatedScheme.report = `本方案选择${selectedMaterial.value.name}作为材料，设计为${selectedForm.value.name}，创作主题为${selectedTheme.value.name}，小题材聚焦“${selectedSubject.value.name}”。材质上，${selectedMaterial.value.appraisal}题材上，${selectedSubject.value.symbol}工艺上，${selectedForm.value.craft}整体方案适合从材质特征、题材寓意、工艺难点、佩戴或陈设场景四个角度整理成作品档案。`;
     generatedScheme.assetLogic = `本页采用“预生成 AI 图像素材库 + 前端参数匹配”的方式完成展示。四类材质、三种样式、四个主题与十二个小题材形成 144 张本地图片，不依赖实时生图 API，因此适合离线打包和邮件提交。`;
     generatedScheme.assetNote = `当前图片来自 material-core 素材库，文件名按“材质-样式-主题-小题材”命名。不同材质的提示词已分别强调白玉的温润、青玉的古雅、翡翠的通透和南红的俏色。`;
     generatedScheme.prompt = `以${selectedMaterial.value.name}为材质，设计一件${selectedForm.value.name}，主题为${selectedTheme.value.name}中的${selectedSubject.value.name}。画面应强调${selectedMaterial.value.feature}、${selectedForm.value.note}和${selectedSubject.value.symbol}，同时让材质语言影响造型、雕工、厚薄、光泽与构图，而不只是改变颜色。`;

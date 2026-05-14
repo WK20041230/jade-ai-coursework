@@ -4,7 +4,7 @@
       <view class="hero-copy">
         <text class="eyebrow">玉石鉴赏期末作品</text>
         <text class="title">玉语 AI</text>
-        <text class="subtitle">围绕四种核心材质，把玉石知识、器物设计和鉴赏报告放进一个轻量小程序。</text>
+        <text class="subtitle">围绕四种核心材质，把玉石知识、AI 设计和作品档案放进一个轻量小程序。</text>
       </view>
       <view class="jade-scene" aria-hidden="true">
         <view class="jade-disc"></view>
@@ -26,16 +26,16 @@
         <text class="feature-desc">用开放馆藏真图复习材质、工艺与题材。</text>
       </view>
       <view class="feature-card" @tap="go('/pages/report')">
-        <text class="feature-icon">鉴</text>
-        <text class="feature-title">鉴赏报告</text>
-        <text class="feature-desc">按课堂维度整理一份可展示的评价。</text>
+        <text class="feature-icon">档</text>
+        <text class="feature-title">作品档案</text>
+        <text class="feature-desc">整理生成方案，形成可提交的设计说明。</text>
       </view>
     </view>
 
     <view class="section">
       <view class="section-head">
-        <text class="section-title">鉴赏流程</text>
-        <text class="section-note">从观察到判断</text>
+        <text class="section-title">创作流程</text>
+        <text class="section-note">从知识到作品</text>
       </view>
       <view class="timeline">
         <view class="step" v-for="item in steps" :key="item.title">
@@ -52,9 +52,9 @@
 
 <script setup lang="ts">
 const steps = [
-  { num: '01', title: '看材质', desc: '观察透明度、结构细腻度、油润感和颜色分布。' },
-  { num: '02', title: '看工艺', desc: '判断比例、线条、抛光、俏色运用与雕刻主题。' },
-  { num: '03', title: '看文化', desc: '结合题材寓意、器型传统和审美表达完成评价。' }
+  { num: '01', title: '查知识', desc: '用真实馆藏理解材质、工艺和题材寓意。' },
+  { num: '02', title: '琢方案', desc: '选择材质、样式、主题和小题材生成 AI 玉器图像。' },
+  { num: '03', title: '成档案', desc: '把图像、传统依据和创新说明整理成作品成果。' }
 ];
 
 const go = (url: string) => {
