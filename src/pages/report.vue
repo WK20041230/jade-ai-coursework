@@ -78,6 +78,10 @@
         <text class="section-text">{{ archive.innovation }}</text>
       </view>
     </view>
+    <view v-else class="archive-empty">
+      <text class="empty-title">尚未生成作品档案</text>
+      <text class="empty-text">确认当前作品后，点击“生成档案”，下方会出现完整的设计说明、传统依据和 AI 创新点。</text>
+    </view>
 
     <view v-if="selectorOpen" class="selector-mask" @tap="closeSelector">
       <view class="selector" @tap.stop>
@@ -89,28 +93,36 @@
           <button class="close-btn" @tap="closeSelector">×</button>
         </view>
 
-        <view class="filter-row">
-          <button
-            v-for="(material, index) in materials"
-            :key="material.name"
-            class="filter-btn"
-            :class="{ active: materialIndex === index }"
-            @tap="chooseMaterial(index)"
-          >
-            {{ material.name }}
-          </button>
-        </view>
+        <view class="filter-panel">
+          <view class="filter-group">
+            <text class="filter-label">材质</text>
+            <view class="filter-options material-options">
+              <button
+                v-for="(material, index) in materials"
+                :key="material.name"
+                class="filter-btn"
+                :class="{ active: materialIndex === index }"
+                @tap="chooseMaterial(index)"
+              >
+                {{ material.name }}
+              </button>
+            </view>
+          </view>
 
-        <view class="filter-row compact">
-          <button
-            v-for="(formOption, index) in forms"
-            :key="formOption.name"
-            class="filter-btn"
-            :class="{ active: formIndex === index }"
-            @tap="chooseForm(index)"
-          >
-            {{ formOption.name }}
-          </button>
+          <view class="filter-group">
+            <text class="filter-label">样式</text>
+            <view class="filter-options form-options">
+              <button
+                v-for="(formOption, index) in forms"
+                :key="formOption.name"
+                class="filter-btn"
+                :class="{ active: formIndex === index }"
+                @tap="chooseForm(index)"
+              >
+                {{ formOption.name }}
+              </button>
+            </view>
+          </view>
         </view>
 
         <scroll-view class="gallery-scroll" scroll-y>
@@ -287,33 +299,35 @@ const closeSelector = () => {
 
 const chooseMaterial = (index: number) => {
   materialIndex.value = index;
+  form.name = comboName.value;
+  archive.value = null;
 };
 
 const chooseForm = (index: number) => {
   formIndex.value = index;
+  form.name = comboName.value;
+  archive.value = null;
 };
 
 const selectGalleryItem = (item: GalleryItem) => {
   themeIndex.value = item.themeIndex;
   subjectIndex.value = item.subjectIndex;
   form.name = comboName.value;
-  makeArchive(false);
+  archive.value = null;
   closeSelector();
 };
 
 const makeArchive = (showToast = true) => {
   const note = form.note.trim();
   archive.value = {
-    design: `${archiveName.value}以${selectedMaterial.value.name}为材质，采用${selectedForm.value.name}形制，题材选择“${selectedSubject.value.name}”。材质上，${selectedMaterial.value.design}造型上，${selectedForm.value.craft}题材上，${selectedSubject.value.symbol}${note ? `补充设想是：${note}` : ''}`,
-    tradition: `这个方案把传统玉器中的材质审美、器型规范和题材寓意拆解为可选择参数。${selectedTheme.value.name}提供文化语义，${selectedSubject.value.name}提供可识别图像核心，${selectedMaterial.value.name}则决定作品的光泽、色彩和情绪方向。`,
-    innovation: `AI 部分不是替代玉雕工艺，而是用于快速预演材质、题材和形制组合后的视觉效果。页面通过本地 144 张预生成图片完成离线展示，使作品既能保留传统玉器语言，也具备数字化生成和网页交互的表达方式。`
+    design: `${archiveName.value}以${selectedMaterial.value.name}为主要材质，采用${selectedForm.value.name}形制，题材选择“${selectedSubject.value.name}”。材质上，${selectedMaterial.value.design}因此作品的第一视觉不只是颜色，而是由光泽、透明度、厚薄关系和表面抛光共同形成的玉质感。造型上，${selectedForm.value.craft}这决定了画面不能只追求装饰堆叠，还需要兼顾佩戴结构、观看重心和边缘处理。题材上，${selectedSubject.value.symbol}在作品档案中，这一方案可以被理解为“材质特征 + 传统题材 + 当代图像生成”的组合实验。${note ? `补充设想是：${note}` : ''}`,
+    tradition: `${selectedTheme.value.name}为作品提供了清晰的文化语义，${selectedSubject.value.name}则提供了可识别的图像核心。传统玉器并不只是把纹样刻在材料表面，而是会根据玉料的颜色、润度、透明度和形制来调整题材表达；例如温润材质更适合含蓄柔和的线面，色彩鲜明的材质更适合强调守护、吉祥或节庆气质。这个方案把传统玉器中的材质审美、器型规范和题材寓意拆解为可选择参数，再重新组合成一个具体作品，使观看者能够从“为什么选这种玉、为什么做这种形、为什么用这个题材”三个层面理解它。`,
+    innovation: `AI 在这里不是替代玉雕工艺，而是作为前期视觉预演工具：它可以快速呈现不同材质、样式和题材组合后的视觉效果，帮助比较哪一种方案更有辨识度、更适合网页展示，也更容易形成完整说明。页面使用 144 张本地预生成图像，不依赖实时接口，因此适合离线提交和长期展示。作品档案把 AI 图像、传统依据、材质说明和设计意图放在同一页面中，使结果不只是单张图片，而是一个可以被阅读、比较和归档的数字玉器设计方案。`
   };
   if (showToast) {
     uni.showToast({ title: '档案已生成', icon: 'success' });
   }
 };
-
-makeArchive(false);
 </script>
 
 <style scoped>
@@ -523,6 +537,32 @@ makeArchive(false);
   padding: 30rpx;
 }
 
+.archive-empty {
+  max-width: 1180px;
+  margin: 26rpx auto 0;
+  padding: 34rpx;
+  border-radius: 16rpx;
+  border: 1px dashed #d9cdb9;
+  background: rgba(255, 255, 255, 0.62);
+  text-align: center;
+  box-sizing: border-box;
+}
+
+.empty-title {
+  display: block;
+  color: #1f302b;
+  font-size: 28rpx;
+  font-weight: 900;
+}
+
+.empty-text {
+  display: block;
+  margin-top: 10rpx;
+  color: #68736d;
+  font-size: 24rpx;
+  line-height: 1.6;
+}
+
 .archive-head {
   display: flex;
   justify-content: space-between;
@@ -621,7 +661,7 @@ makeArchive(false);
 
 .selector {
   width: min(1180px, 100%);
-  max-height: 88vh;
+  max-height: 94vh;
   padding: 28rpx;
   box-sizing: border-box;
   display: flex;
@@ -660,27 +700,52 @@ makeArchive(false);
   line-height: 64rpx;
 }
 
-.filter-row {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 12rpx;
-  margin-bottom: 12rpx;
+.filter-panel {
+  padding: 18rpx;
+  border-radius: 14rpx;
+  background: #f7f4ec;
+  margin-bottom: 22rpx;
 }
 
-.filter-row.compact {
+.filter-group {
+  display: grid;
+  grid-template-columns: 84rpx 1fr;
+  gap: 14rpx;
+  align-items: center;
+}
+
+.filter-group + .filter-group {
+  margin-top: 14rpx;
+}
+
+.filter-label {
+  color: #9a7437;
+  font-size: 22rpx;
+  font-weight: 900;
+}
+
+.filter-options {
+  display: grid;
+  gap: 10rpx;
+}
+
+.material-options {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.form-options {
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  margin-bottom: 20rpx;
 }
 
 .filter-btn {
-  height: 68rpx;
-  border-radius: 10rpx;
+  height: 62rpx;
+  border-radius: 999rpx;
   border: 1px solid #e6dfd2;
-  background: #fbfaf7;
+  background: #fff;
   color: #3c4b45;
-  font-size: 23rpx;
+  font-size: 22rpx;
   font-weight: 800;
-  line-height: 68rpx;
+  line-height: 62rpx;
 }
 
 .filter-btn.active {
@@ -690,7 +755,7 @@ makeArchive(false);
 }
 
 .gallery-scroll {
-  max-height: 56vh;
+  max-height: 68vh;
 }
 
 .gallery-grid {
@@ -713,7 +778,7 @@ makeArchive(false);
 
 .gallery-image {
   width: 100%;
-  height: 230rpx;
+  height: 300rpx;
   display: block;
   background: #e8e1d3;
 }
@@ -750,9 +815,16 @@ makeArchive(false);
     height: 520rpx;
   }
 
-  .filter-row,
-  .filter-row.compact,
   .gallery-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .filter-group {
+    grid-template-columns: 1fr;
+  }
+
+  .material-options,
+  .form-options {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
