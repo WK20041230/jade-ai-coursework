@@ -24,30 +24,63 @@
           <input class="input" v-model="form.name" placeholder="例如：南红玛瑙莲花玉佩" />
         </view>
 
-        <view class="form-grid">
-          <view class="form-group">
-            <text class="label">材质</text>
-            <picker @change="onMaterialChange" :value="materialIndex" :range="materialNames">
-              <view class="picker-box">{{ selectedMaterial.name }}</view>
-            </picker>
+        <view class="choice-section">
+          <text class="label">材质</text>
+          <view class="choice-grid four">
+            <button
+              v-for="(material, index) in materials"
+              :key="material.name"
+              class="choice-btn"
+              :class="{ active: materialIndex === index }"
+              @tap="chooseMaterial(index)"
+            >
+              {{ material.name }}
+            </button>
           </view>
-          <view class="form-group">
-            <text class="label">样式</text>
-            <picker @change="onFormChange" :value="formIndex" :range="formNames">
-              <view class="picker-box">{{ selectedForm.name }}</view>
-            </picker>
+        </view>
+
+        <view class="choice-section">
+          <text class="label">样式</text>
+          <view class="choice-grid three">
+            <button
+              v-for="(formOption, index) in forms"
+              :key="formOption.name"
+              class="choice-btn"
+              :class="{ active: formIndex === index }"
+              @tap="chooseForm(index)"
+            >
+              {{ formOption.name }}
+            </button>
           </view>
-          <view class="form-group">
-            <text class="label">主题</text>
-            <picker @change="onThemeChange" :value="themeIndex" :range="themeNames">
-              <view class="picker-box">{{ selectedTheme.name }}</view>
-            </picker>
+        </view>
+
+        <view class="choice-section">
+          <text class="label">主题</text>
+          <view class="choice-grid four">
+            <button
+              v-for="(theme, index) in themes"
+              :key="theme.name"
+              class="choice-btn"
+              :class="{ active: themeIndex === index }"
+              @tap="chooseTheme(index)"
+            >
+              {{ theme.name }}
+            </button>
           </view>
-          <view class="form-group">
-            <text class="label">小题材</text>
-            <picker @change="onSubjectChange" :value="subjectIndex" :range="subjectNames">
-              <view class="picker-box">{{ selectedSubject.name }}</view>
-            </picker>
+        </view>
+
+        <view class="choice-section">
+          <text class="label">小题材</text>
+          <view class="choice-grid three">
+            <button
+              v-for="(subject, index) in selectedTheme.subjects"
+              :key="subject.name"
+              class="choice-btn subject-btn"
+              :class="{ active: subjectIndex === index }"
+              @tap="chooseSubject(index)"
+            >
+              {{ subject.name }}
+            </button>
           </view>
         </view>
 
@@ -203,11 +236,6 @@ const form = reactive({
   note: '希望作品既有传统莲花的清雅寓意，也能体现南红玛瑙温暖、明艳的视觉识别度。'
 });
 
-const materialNames = computed(() => materials.map((item) => item.name));
-const formNames = computed(() => forms.map((item) => item.name));
-const themeNames = computed(() => themes.map((item) => item.name));
-const subjectNames = computed(() => selectedTheme.value.subjects.map((item) => item.name));
-
 const selectedMaterial = computed(() => materials[materialIndex.value]);
 const selectedForm = computed(() => forms[formIndex.value]);
 const selectedTheme = computed(() => themes[themeIndex.value]);
@@ -223,31 +251,41 @@ const archiveItems = computed(() => [
   { label: '题材', value: `${selectedSubject.value.name}：${selectedSubject.value.symbol}` }
 ]);
 
-const onMaterialChange = (e: any) => {
-  materialIndex.value = Number(e.detail.value);
+const refreshArchive = () => {
+  makeArchive(false);
 };
 
-const onFormChange = (e: any) => {
-  formIndex.value = Number(e.detail.value);
+const chooseMaterial = (index: number) => {
+  materialIndex.value = index;
+  refreshArchive();
 };
 
-const onThemeChange = (e: any) => {
-  themeIndex.value = Number(e.detail.value);
+const chooseForm = (index: number) => {
+  formIndex.value = index;
+  refreshArchive();
+};
+
+const chooseTheme = (index: number) => {
+  themeIndex.value = index;
   subjectIndex.value = 0;
+  refreshArchive();
 };
 
-const onSubjectChange = (e: any) => {
-  subjectIndex.value = Number(e.detail.value);
+const chooseSubject = (index: number) => {
+  subjectIndex.value = index;
+  refreshArchive();
 };
 
-const makeArchive = () => {
+const makeArchive = (showToast = true) => {
   const note = form.note.trim();
   archive.value = {
     design: `${archiveName.value}以${selectedMaterial.value.name}为材质，采用${selectedForm.value.name}形制，题材选择“${selectedSubject.value.name}”。材质上，${selectedMaterial.value.design}造型上，${selectedForm.value.craft}题材上，${selectedSubject.value.symbol}${note ? `补充设想是：${note}` : ''}`,
     tradition: `这个方案把传统玉器中的材质审美、器型规范和题材寓意拆解为可选择参数。${selectedTheme.value.name}提供文化语义，${selectedSubject.value.name}提供可识别图像核心，${selectedMaterial.value.name}则决定作品的光泽、色彩和情绪方向。`,
     innovation: `AI 部分不是替代玉雕工艺，而是用于快速预演材质、题材和形制组合后的视觉效果。页面通过本地 144 张预生成图片完成离线展示，使作品既能保留传统玉器语言，也具备数字化生成和网页交互的表达方式。`
   };
-  uni.showToast({ title: '档案已生成', icon: 'success' });
+  if (showToast) {
+    uni.showToast({ title: '档案已生成', icon: 'success' });
+  }
 };
 
 makeArchive();
@@ -367,14 +405,48 @@ makeArchive();
   font-size: 24rpx;
 }
 
-.form-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 18rpx;
-}
-
 .form-group {
   margin-bottom: 22rpx;
+}
+
+.choice-section {
+  margin-bottom: 22rpx;
+}
+
+.choice-grid {
+  display: grid;
+  gap: 12rpx;
+}
+
+.choice-grid.four {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.choice-grid.three {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.choice-btn {
+  height: 70rpx;
+  padding: 0 10rpx;
+  border-radius: 10rpx;
+  border: 1px solid #e6dfd2;
+  background: #fbfaf7;
+  color: #3c4b45;
+  font-size: 23rpx;
+  line-height: 70rpx;
+  font-weight: 700;
+  text-align: center;
+}
+
+.choice-btn.active {
+  border-color: #1f6b5b;
+  background: #1f6b5b;
+  color: #fff;
+}
+
+.subject-btn {
+  font-size: 22rpx;
 }
 
 .label {
@@ -386,7 +458,6 @@ makeArchive();
 }
 
 .input,
-.picker-box,
 .textarea {
   width: 100%;
   border-radius: 10rpx;
@@ -397,8 +468,7 @@ makeArchive();
   box-sizing: border-box;
 }
 
-.input,
-.picker-box {
+.input {
   min-height: 78rpx;
   padding: 0 20rpx;
   display: flex;
@@ -551,9 +621,13 @@ makeArchive();
     grid-template-columns: 1fr;
   }
 
-  .archive-grid,
-  .form-grid {
+  .archive-grid {
     grid-template-columns: 1fr;
+  }
+
+  .choice-grid.four,
+  .choice-grid.three {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
