@@ -126,46 +126,51 @@ const openSource = (url: string) => {
 <style scoped>
 .page {
   min-height: 100vh;
-  padding: 36px 40px 64px;
+  padding: 32px 40px 64px;
   background:
     linear-gradient(90deg, rgba(31, 107, 91, 0.035), rgba(31, 107, 91, 0) 18%, rgba(31, 107, 91, 0) 82%, rgba(154, 116, 55, 0.05)),
     #f6f4ef;
   box-sizing: border-box;
+  overflow-x: hidden;
 }
 
 .article {
-  max-width: 1360px;
+  max-width: 1480px;
   margin: 0 auto;
 }
 
 .article-head {
-  padding: 28px 0 24px;
-  border-bottom: 1px solid #ded8ca;
+  padding: 30px 34px;
+  border-radius: 18px;
+  background: #173f36;
+  color: #fff;
+  box-shadow: 0 18px 46px rgba(31, 70, 62, 0.16);
 }
 
 .eyebrow {
   display: block;
   font-size: 18px;
-  color: #9a7437;
+  color: #dfc58f;
   font-weight: 800;
 }
 
 .title {
   display: block;
   margin-top: 10px;
-  font-size: 42px;
+  font-size: 46px;
   line-height: 1.1;
-  color: #152923;
+  color: #fff;
   font-weight: 900;
 }
 
 .desc {
   display: block;
   margin-top: 14px;
-  max-width: 860px;
-  color: #53615b;
+  max-width: 960px;
+  color: rgba(255, 255, 255, 0.82);
   font-size: 17px;
   line-height: 1.6;
+  overflow-wrap: anywhere;
 }
 
 .chips {
@@ -178,17 +183,17 @@ const openSource = (url: string) => {
 .chip {
   padding: 9px 14px;
   border-radius: 8px;
-  background: #e8f2ed;
-  color: #2d6c5e;
+  background: rgba(255, 255, 255, 0.12);
+  color: #f3e4c2;
   font-size: 16px;
 }
 
 .layout {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 520px;
-  gap: 28px;
+  grid-template-columns: minmax(0, 1fr) minmax(520px, 0.68fr);
+  gap: 30px;
   align-items: start;
-  margin-top: 28px;
+  margin-top: 24px;
 }
 
 .main-column,
@@ -205,24 +210,24 @@ const openSource = (url: string) => {
 .image-panel,
 .facts {
   background: #fff;
-  border-radius: 10px;
+  border-radius: 12px;
   box-shadow: 0 10px 26px rgba(44, 53, 48, 0.06);
 }
 
 .section {
-  margin-bottom: 22px;
-  padding: 28px;
+  margin-bottom: 20px;
+  padding: 30px 34px;
 }
 
 .lead-section {
-  border-top: 5px solid #1f6b5b;
+  border-left: 5px solid #1f6b5b;
 }
 
 .section-title {
   display: block;
   padding-bottom: 12px;
   border-bottom: 1px solid #eee8dc;
-  font-size: 22px;
+  font-size: 23px;
   color: #1f302b;
   font-weight: 900;
 }
@@ -230,8 +235,8 @@ const openSource = (url: string) => {
 .section-text {
   display: block;
   margin-top: 16px;
-  font-size: 16px;
-  line-height: 1.85;
+  font-size: 17px;
+  line-height: 1.9;
   color: #4f5b56;
   text-align: justify;
 }
@@ -239,7 +244,7 @@ const openSource = (url: string) => {
 .image-panel {
   overflow: hidden;
   background: #ebe6dc;
-  min-height: 430px;
+  min-height: 560px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -247,13 +252,13 @@ const openSource = (url: string) => {
 
 .hero-photo {
   width: 100%;
-  height: 430px;
+  height: 560px;
   display: block;
 }
 
 .facts {
   margin-top: 16px;
-  padding: 22px;
+  padding: 24px;
 }
 
 .fact-row {
@@ -317,17 +322,17 @@ const openSource = (url: string) => {
 .point-list {
   margin-top: 18px;
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 14px;
 }
 
 .point-card {
-  padding: 18px;
+  padding: 20px;
   border-radius: 8px;
   background: #f7f4ec;
   color: #2f3d38;
   font-size: 15px;
-  line-height: 1.5;
+  line-height: 1.65;
 }
 
 .example-grid {
@@ -345,7 +350,7 @@ const openSource = (url: string) => {
 
 .example-photo {
   width: 100%;
-  height: 230px;
+  height: 260px;
   display: block;
   background: #e8e1d3;
 }
@@ -395,6 +400,14 @@ const openSource = (url: string) => {
     grid-template-columns: 1fr;
   }
 
+  .article-head {
+    padding: 36rpx;
+  }
+
+  .title {
+    font-size: 54rpx;
+  }
+
   .info-column {
     position: static;
     order: -1;
@@ -406,11 +419,11 @@ const openSource = (url: string) => {
   }
 
   .image-panel {
-    min-height: 320rpx;
+    min-height: 520rpx;
   }
 
   .hero-photo {
-    height: 360rpx;
+    height: 520rpx;
   }
 }
 </style>

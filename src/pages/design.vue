@@ -2,98 +2,100 @@
   <view class="page">
     <view class="header">
       <text class="title">灵感琢玉</text>
-      <text class="subtitle">选择固定参数后，系统会匹配预先由 AI 生成的素材库，并同步生成设计说明、鉴赏角度和作品档案文本。</text>
+      <text class="subtitle">选择材质、器型、主题和题材后，生成一件 AI 玉器视觉方案，并同步整理设计说明与鉴赏角度。</text>
     </view>
 
     <view class="panel">
-      <view class="select-field">
-        <text class="label">玉石种类</text>
-        <view class="select-box" @tap="toggleDropdown('material')">
-          <view>
-            <text class="select-value">{{ selectedMaterial.name }}</text>
-            <text class="select-desc">{{ selectedMaterial.feature }}</text>
+      <view class="control-grid">
+        <view class="select-field">
+          <text class="label">玉石种类</text>
+          <view class="select-box" @tap="toggleDropdown('material')">
+            <view>
+              <text class="select-value">{{ selectedMaterial.name }}</text>
+              <text class="select-desc">{{ selectedMaterial.feature }}</text>
+            </view>
+            <text class="select-arrow">{{ openDropdown === 'material' ? '收起' : '选择' }}</text>
           </view>
-          <text class="select-arrow">{{ openDropdown === 'material' ? '收起' : '选择' }}</text>
-        </view>
-        <view v-if="openDropdown === 'material'" class="dropdown">
-          <view
-            v-for="(item, index) in materials"
-            :key="item.name"
-            class="dropdown-option"
-            :class="{ active: materialIndex === index }"
-            @tap="chooseMaterial(index)"
-          >
-            <text class="option-title">{{ item.name }}</text>
-            <text class="option-desc">{{ item.feature }}</text>
+          <view v-if="openDropdown === 'material'" class="dropdown">
+            <view
+              v-for="(item, index) in materials"
+              :key="item.name"
+              class="dropdown-option"
+              :class="{ active: materialIndex === index }"
+              @tap="chooseMaterial(index)"
+            >
+              <text class="option-title">{{ item.name }}</text>
+              <text class="option-desc">{{ item.feature }}</text>
+            </view>
           </view>
         </view>
-      </view>
 
-      <view class="select-field">
-        <text class="label">作品样式</text>
-        <view class="select-box" @tap="toggleDropdown('form')">
-          <view>
-            <text class="select-value">{{ selectedForm.name }}</text>
-            <text class="select-desc">{{ selectedForm.note }}</text>
+        <view class="select-field">
+          <text class="label">作品样式</text>
+          <view class="select-box" @tap="toggleDropdown('form')">
+            <view>
+              <text class="select-value">{{ selectedForm.name }}</text>
+              <text class="select-desc">{{ selectedForm.note }}</text>
+            </view>
+            <text class="select-arrow">{{ openDropdown === 'form' ? '收起' : '选择' }}</text>
           </view>
-          <text class="select-arrow">{{ openDropdown === 'form' ? '收起' : '选择' }}</text>
-        </view>
-        <view v-if="openDropdown === 'form'" class="dropdown">
-          <view
-            v-for="(item, index) in forms"
-            :key="item.name"
-            class="dropdown-option"
-            :class="{ active: formIndex === index }"
-            @tap="chooseForm(index)"
-          >
-            <text class="option-title">{{ item.name }}</text>
-            <text class="option-desc">{{ item.note }}</text>
+          <view v-if="openDropdown === 'form'" class="dropdown">
+            <view
+              v-for="(item, index) in forms"
+              :key="item.name"
+              class="dropdown-option"
+              :class="{ active: formIndex === index }"
+              @tap="chooseForm(index)"
+            >
+              <text class="option-title">{{ item.name }}</text>
+              <text class="option-desc">{{ item.note }}</text>
+            </view>
           </view>
         </view>
-      </view>
 
-      <view class="select-field">
-        <text class="label">创作主题</text>
-        <view class="select-box" @tap="toggleDropdown('theme')">
-          <view>
-            <text class="select-value">{{ selectedTheme.name }}</text>
-            <text class="select-desc">{{ selectedTheme.note }}</text>
+        <view class="select-field">
+          <text class="label">创作主题</text>
+          <view class="select-box" @tap="toggleDropdown('theme')">
+            <view>
+              <text class="select-value">{{ selectedTheme.name }}</text>
+              <text class="select-desc">{{ selectedTheme.note }}</text>
+            </view>
+            <text class="select-arrow">{{ openDropdown === 'theme' ? '收起' : '选择' }}</text>
           </view>
-          <text class="select-arrow">{{ openDropdown === 'theme' ? '收起' : '选择' }}</text>
-        </view>
-        <view v-if="openDropdown === 'theme'" class="dropdown">
-          <view
-            v-for="(item, index) in themes"
-            :key="item.name"
-            class="dropdown-option"
-            :class="{ active: themeIndex === index }"
-            @tap="chooseTheme(index)"
-          >
-            <text class="option-title">{{ item.name }}</text>
-            <text class="option-desc">{{ item.note }}</text>
+          <view v-if="openDropdown === 'theme'" class="dropdown">
+            <view
+              v-for="(item, index) in themes"
+              :key="item.name"
+              class="dropdown-option"
+              :class="{ active: themeIndex === index }"
+              @tap="chooseTheme(index)"
+            >
+              <text class="option-title">{{ item.name }}</text>
+              <text class="option-desc">{{ item.note }}</text>
+            </view>
           </view>
         </view>
-      </view>
 
-      <view class="select-field">
-        <text class="label">小题材</text>
-        <view class="select-box" @tap="toggleDropdown('subject')">
-          <view>
-            <text class="select-value">{{ selectedSubject.name }}</text>
-            <text class="select-desc">{{ selectedSubject.symbol }}</text>
+        <view class="select-field">
+          <text class="label">小题材</text>
+          <view class="select-box" @tap="toggleDropdown('subject')">
+            <view>
+              <text class="select-value">{{ selectedSubject.name }}</text>
+              <text class="select-desc">{{ selectedSubject.symbol }}</text>
+            </view>
+            <text class="select-arrow">{{ openDropdown === 'subject' ? '收起' : '选择' }}</text>
           </view>
-          <text class="select-arrow">{{ openDropdown === 'subject' ? '收起' : '选择' }}</text>
-        </view>
-        <view v-if="openDropdown === 'subject'" class="dropdown">
-          <view
-            v-for="(item, index) in subjects"
-            :key="item.name"
-            class="dropdown-option"
-            :class="{ active: subjectIndex === index }"
-            @tap="chooseSubject(index)"
-          >
-            <text class="option-title">{{ item.name }}</text>
-            <text class="option-desc">{{ item.symbol }}</text>
+          <view v-if="openDropdown === 'subject'" class="dropdown">
+            <view
+              v-for="(item, index) in subjects"
+              :key="item.name"
+              class="dropdown-option"
+              :class="{ active: subjectIndex === index }"
+              @tap="chooseSubject(index)"
+            >
+              <text class="option-title">{{ item.name }}</text>
+              <text class="option-desc">{{ item.symbol }}</text>
+            </view>
           </view>
         </view>
       </view>
@@ -104,7 +106,7 @@
 
       <view class="workflow-note">
         <text class="workflow-title">创作逻辑</text>
-        <text class="workflow-text">本页不是现场调用生成式 AI，而是采用“有限选项 + 预生成素材库”的方式：先用 AI 批量生成稳定图片，再由程序按材质、器型、主题和小题材进行匹配，适合作为课程作业展示和离线提交。</text>
+        <text class="workflow-text">本页把玉石材质、器物样式、创作主题和具体题材转化为清晰的设计条件，让 AI 参与视觉方案生成，再用文字说明补充材质、工艺和文化寓意。</text>
       </view>
     </view>
 
@@ -139,8 +141,8 @@
       </view>
 
       <view class="concept-box">
-        <text class="concept-title">AI 素材库说明</text>
-        <text class="concept-text">{{ generatedScheme.assetLogic }}</text>
+        <text class="concept-title">AI 参与创作说明</text>
+        <text class="concept-text">{{ generatedScheme.aiProcess }}</text>
       </view>
 
       <view class="detail-grid expansion-grid">
@@ -148,20 +150,6 @@
           <text class="detail-label">生成提示词</text>
           <text class="detail-text">{{ generatedScheme.prompt }}</text>
         </view>
-        <view class="detail-card">
-          <text class="detail-label">展示价值</text>
-          <text class="detail-text">{{ generatedScheme.displayValue }}</text>
-        </view>
-        <view class="detail-card">
-          <text class="detail-label">创新说明</text>
-          <text class="detail-text">{{ generatedScheme.innovation }}</text>
-        </view>
-      </view>
-
-      <view class="asset-note">
-        <text class="asset-title">图片素材位</text>
-        <text class="asset-text">{{ generatedScheme.assetNote }}</text>
-        <text class="asset-key">建议文件名：{{ generatedScheme.assetName }}</text>
       </view>
     </view>
   </view>
@@ -196,7 +184,8 @@ type Theme = {
   subjects: Subject[];
 };
 
-const localAsset = (path: string) => `${import.meta.env.BASE_URL}${path}`;
+const assetVersion = '20260524-full-artwork-1410';
+const localAsset = (path: string) => `${import.meta.env.BASE_URL}${path}?v=${assetVersion}`;
 
 const materials: Material[] = [
   { name: '羊脂白玉', feature: '温润凝脂', appraisal: '羊脂白玉以温润、细腻、含蓄为主要审美特征，适合表现柔和圆润的浮雕和传统人物题材。' },
@@ -218,8 +207,8 @@ const themes: Theme[] = [
     { name: '竹叶', symbol: '象征节气、坚韧和文人气质，适合用疏密线条表现清劲。', image: 'static/presets/landscape-green.svg' }
   ] },
   { name: '神话故事', note: '传统人物', subjects: [
-    { name: '钟馗', symbol: '寓意镇邪纳福，人物姿态需要有力量感和辨识度。', image: 'static/presets/zhongkui-white.svg' },
-    { name: '观音', symbol: '寓意慈悲、平安和守护，适合柔和衣纹与端庄构图。', image: 'static/presets/zhongkui-white.svg' },
+    { name: '寿星', symbol: '寓意福寿绵长，适合搭配仙桃、灵芝、长眉与拐杖等祝寿意象。', image: 'static/presets/shoulao-white.svg' },
+    { name: '观音', symbol: '寓意慈悲、平安和守护，适合柔和衣纹与端庄构图。', image: 'static/presets/lotus-ice.svg' },
     { name: '哪吒', symbol: '象征勇气、活力和突破，适合表现动态飘带与少年英气。', image: 'static/presets/dragon-red.svg' }
   ] },
   { name: '山水意境', note: '诗意空间', subjects: [
@@ -258,7 +247,7 @@ const subjectSlugs: Record<string, string> = {
   '莲花': 'lotus',
   '锦鲤': 'koi',
   '竹叶': 'bamboo',
-  '钟馗': 'zhongkui',
+  '寿星': 'shoulao',
   '观音': 'guanyin',
   '哪吒': 'nezha',
   '远山云水': 'mountain-cloud',
@@ -294,12 +283,8 @@ const generatedScheme = reactive({
   symbol: '',
   craft: '',
   report: '',
-  assetLogic: '',
-  assetNote: '',
-  prompt: '',
-  displayValue: '',
-  innovation: '',
-  assetName: ''
+  aiProcess: '',
+  prompt: ''
 });
 
 const toggleDropdown = (name: DropdownName) => {
@@ -361,13 +346,9 @@ const generateScheme = () => {
     generatedScheme.appraisal = selectedMaterial.value.appraisal;
     generatedScheme.symbol = selectedSubject.value.symbol;
     generatedScheme.craft = selectedForm.value.craft;
-    generatedScheme.assetName = `${materialSlugs[selectedMaterial.value.name]}-${formSlugs[selectedForm.value.name]}-${themeSlugs[selectedTheme.value.name]}-${subjectSlugs[selectedSubject.value.name]}.jpg`;
     generatedScheme.report = `本方案选择${selectedMaterial.value.name}作为材料，设计为${selectedForm.value.name}，创作主题为${selectedTheme.value.name}，小题材聚焦“${selectedSubject.value.name}”。材质上，${selectedMaterial.value.appraisal}题材上，${selectedSubject.value.symbol}工艺上，${selectedForm.value.craft}整体方案适合从材质特征、题材寓意、工艺难点、佩戴或陈设场景四个角度整理成作品档案。`;
-    generatedScheme.assetLogic = `本页采用“预生成 AI 图像素材库 + 前端参数匹配”的方式完成展示。四类材质、三种样式、四个主题与十二个小题材形成 144 张本地图片，不依赖实时生图 API，因此适合离线打包和邮件提交。`;
-    generatedScheme.assetNote = `当前图片来自 material-core 素材库，文件名按“材质-样式-主题-小题材”命名。不同材质的提示词已分别强调白玉的温润、青玉的古雅、翡翠的通透和南红的俏色。`;
+    generatedScheme.aiProcess = `本作品通过参数化选择和 AI 图像生成辅助完成初步视觉方案。系统先确定玉石材质、器物样式、创作主题和具体题材，再将这些条件转化为图像生成提示词，使 AI 根据传统玉器的材质特征、题材寓意和造型逻辑生成视觉方案。后续文字说明则围绕材质判断、工艺重点和文化寓意展开，让作品不只是单张图片，而是一个可解释的玉器设计方案。`;
     generatedScheme.prompt = `以${selectedMaterial.value.name}为材质，设计一件${selectedForm.value.name}，主题为${selectedTheme.value.name}中的${selectedSubject.value.name}。画面应强调${selectedMaterial.value.feature}、${selectedForm.value.note}和${selectedSubject.value.symbol}，同时让材质语言影响造型、雕工、厚薄、光泽与构图，而不只是改变颜色。`;
-    generatedScheme.displayValue = `适合在成果说明中展示“传统题材数字化转译”的过程：从玉材认知到题材选择，再到 AI 图像素材和文字报告的组合呈现。`;
-    generatedScheme.innovation = `作品把传统玉器题材拆解为可选择的设计参数，并用本地 AI 图像素材模拟生成结果，既保留玉器文化语义，也解决免费实时生图 API 不稳定的问题。`;
     hasGenerated.value = true;
     isGenerating.value = false;
     uni.showToast({ title: '方案已生成', icon: 'success' });
@@ -379,47 +360,73 @@ const generateScheme = () => {
 .page {
   min-height: 100vh;
   padding: 32rpx;
-  background: #f6f4ef;
+  background:
+    linear-gradient(90deg, rgba(31, 107, 91, 0.035), rgba(31, 107, 91, 0) 18%, rgba(154, 116, 55, 0.05)),
+    #f6f4ef;
   box-sizing: border-box;
+  overflow-x: hidden;
 }
 
 .header,
 .panel,
 .result-area {
-  max-width: 960rpx;
+  max-width: 1180px;
   margin-left: auto;
   margin-right: auto;
 }
 
 .header {
-  margin-bottom: 28rpx;
+  margin-bottom: 24rpx;
+  padding: 34rpx 38rpx;
+  border-radius: 18rpx;
+  background: #173f36;
+  color: #fff;
+  box-shadow: 0 18rpx 46rpx rgba(31, 70, 62, 0.16);
+  box-sizing: border-box;
 }
 
 .title {
   display: block;
-  font-size: 46rpx;
-  font-weight: 700;
-  color: #1e2d29;
+  font-size: 52rpx;
+  line-height: 1.1;
+  font-weight: 900;
+  color: #fff;
 }
 
 .subtitle {
   display: block;
-  margin-top: 10rpx;
+  margin-top: 14rpx;
+  max-width: 860rpx;
   font-size: 26rpx;
-  line-height: 1.55;
-  color: #68736d;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.84);
+  overflow-wrap: anywhere;
+  white-space: normal;
+  word-break: break-all;
 }
 
 .panel,
 .result-area {
   background: #fff;
-  border-radius: 18rpx;
+  border-radius: 16rpx;
   padding: 30rpx;
   box-shadow: 0 12rpx 32rpx rgba(44, 53, 48, 0.08);
+  box-sizing: border-box;
+}
+
+.panel {
+  border-radius: 16rpx;
+}
+
+.control-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20rpx;
 }
 
 .select-field {
-  margin-bottom: 26rpx;
+  margin-bottom: 0;
+  position: relative;
 }
 
 .label {
@@ -443,6 +450,10 @@ const generateScheme = () => {
   box-sizing: border-box;
 }
 
+.select-box > view {
+  min-width: 0;
+}
+
 .select-value {
   display: block;
   color: #1f2f2a;
@@ -460,7 +471,7 @@ const generateScheme = () => {
 
 .select-arrow {
   flex: 0 0 auto;
-  padding: 8rpx 16rpx;
+  padding: 8rpx 14rpx;
   border-radius: 999rpx;
   background: #eef5f1;
   color: #1f6b5b;
@@ -505,12 +516,13 @@ const generateScheme = () => {
 }
 
 .generate-btn {
+  margin-top: 24rpx;
   height: 92rpx;
   border-radius: 46rpx;
   color: #fff;
-  background: linear-gradient(135deg, #1f6b5b, #b38a45);
+  background: #1f6b5b;
   font-size: 30rpx;
-  font-weight: 700;
+  font-weight: 800;
 }
 
 .workflow-note {
@@ -539,14 +551,18 @@ const generateScheme = () => {
 
 .result-area {
   margin-top: 28rpx;
+  display: grid;
+  grid-template-columns: minmax(420rpx, 0.84fr) minmax(0, 1fr);
+  gap: 28rpx;
+  align-items: start;
 }
 
 .art-frame {
   width: 100%;
-  max-width: 720rpx;
-  height: 520rpx;
-  margin: 0 auto;
-  border-radius: 18rpx;
+  max-width: none;
+  height: 620rpx;
+  margin: 0;
+  border-radius: 14rpx;
   background: #f4f0e7;
   border: 1px solid #e7dece;
   overflow: hidden;
@@ -561,11 +577,11 @@ const generateScheme = () => {
 }
 
 .visual-meta {
-  margin-top: 22rpx;
+  margin-top: 0;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  text-align: center;
+  align-items: flex-start;
+  text-align: left;
 }
 
 .meta-title {
@@ -583,8 +599,9 @@ const generateScheme = () => {
 .detail-grid {
   margin-top: 26rpx;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 16rpx;
+  grid-column: 1 / -1;
 }
 
 .expansion-grid {
@@ -612,22 +629,19 @@ const generateScheme = () => {
   line-height: 1.6;
 }
 
-.concept-box,
-.asset-note {
+.concept-box {
   padding-top: 26rpx;
+  grid-column: 1 / -1;
 }
 
-.concept-title,
-.asset-title {
+.concept-title {
   display: block;
   font-size: 30rpx;
   color: #24332f;
   font-weight: 700;
 }
 
-.concept-text,
-.asset-text,
-.asset-key {
+.concept-text {
   display: block;
   margin-top: 12rpx;
   font-size: 26rpx;
@@ -636,21 +650,12 @@ const generateScheme = () => {
   text-align: justify;
 }
 
-.asset-text,
-.asset-key {
-  padding: 16rpx 18rpx;
-  border-radius: 10rpx;
-  background: #fbfaf7;
-  color: #8a6b35;
-  font-size: 22rpx;
-}
-
-.asset-key {
-  background: #eef5f1;
-  color: #2f6a5d;
-}
-
 @media screen and (max-width: 900px) {
+  .control-grid,
+  .result-area {
+    grid-template-columns: 1fr;
+  }
+
   .detail-grid {
     grid-template-columns: 1fr;
   }
@@ -658,6 +663,15 @@ const generateScheme = () => {
   .art-frame {
     max-width: 100%;
     height: 500rpx;
+  }
+
+  .select-box {
+    padding: 18rpx;
+    gap: 12rpx;
+  }
+
+  .select-arrow {
+    font-size: 21rpx;
   }
 }
 </style>

@@ -4,18 +4,16 @@
       <view class="hero-copy">
         <text class="eyebrow">AI 时代玉器的传承与创新</text>
         <text class="title">玉语 AI</text>
-        <text class="subtitle">用真实馆藏建立知识线索，用本地 AI 图像生成设计方案，最后沉淀为可提交的作品档案。</text>
-        <view class="hero-actions">
-          <button class="primary-action" @tap="go('/pages/design')">开始琢玉</button>
-          <button class="secondary-action" @tap="go('/pages/knowledge')">查看知识库</button>
-        </view>
+        <text class="subtitle">从真实馆藏学习玉器文化，再用 AI 辅助生成设计方案，最后整理为可提交的作品档案。</text>
       </view>
 
-      <view class="hero-art" @tap="go('/pages/report')">
-        <image class="hero-image" :src="heroImage" mode="aspectFit" />
-        <view class="hero-art-caption">
-          <text class="caption-title">南红玛瑙莲花玉佩</text>
-          <text class="caption-desc">作品档案示例</text>
+      <view class="hero-flow">
+        <view class="flow-item" v-for="item in heroFlow" :key="item.title">
+          <text class="flow-num">{{ item.num }}</text>
+          <view class="flow-copy">
+            <text class="flow-title">{{ item.title }}</text>
+            <text class="flow-desc">{{ item.desc }}</text>
+          </view>
         </view>
       </view>
     </view>
@@ -25,11 +23,12 @@
         <view class="module-index">
           <text>{{ item.index }}</text>
         </view>
+        <text class="module-label">{{ item.label }}</text>
         <text class="module-title">{{ item.title }}</text>
         <text class="module-desc">{{ item.desc }}</text>
         <view class="module-foot">
           <text>{{ item.note }}</text>
-          <text class="module-arrow">进入</text>
+          <text class="module-arrow">{{ item.action }}</text>
         </view>
       </view>
     </view>
@@ -40,12 +39,14 @@
           <text class="section-kicker">Selected Works</text>
           <text class="section-title">精选 AI 玉器方案</text>
         </view>
-        <text class="section-note">本地素材库 · 离线可看</text>
+        <text class="section-note">AI 生成图像 · 玉器文化解读</text>
       </view>
 
       <view class="work-grid">
-        <view class="work-card" v-for="work in works" :key="work.title" @tap="go('/pages/report')">
-          <image class="work-image" :src="work.src" mode="aspectFill" />
+        <view class="work-card" v-for="work in works" :key="work.title" @tap="go(work.url)">
+          <view class="work-image-frame">
+            <image class="work-image" :src="work.src" mode="aspectFit" />
+          </view>
           <view class="work-copy">
             <text class="work-title">{{ work.title }}</text>
             <text class="work-meta">{{ work.meta }}</text>
@@ -67,31 +68,42 @@
 </template>
 
 <script setup lang="ts">
-const localAsset = (path: string) => `${import.meta.env.BASE_URL}${path}`;
+const assetVersion = '20260524-full-artwork-1410';
+const localAsset = (path: string) => `${import.meta.env.BASE_URL}${path}?v=${assetVersion}`;
 
-const heroImage = localAsset('static/generated/material-core/red-agate-yupei-huahui-lotus.jpg');
+const heroFlow = [
+  { num: '01', title: '馆藏参照', desc: '用真实玉器建立材质与题材依据' },
+  { num: '02', title: 'AI 生成', desc: '把设计条件转化为视觉方案' },
+  { num: '03', title: '档案整理', desc: '形成可阅读、可提交的成果说明' }
+];
 
 const modules = [
   {
     index: '01',
+    label: 'Knowledge',
     title: '玉石知识库',
-    desc: '用真实开放馆藏理解材质、工艺和题材寓意。',
+    desc: '从开放馆藏中的真实玉器出发，理解材质、工艺和题材寓意。',
     note: '馆藏真图',
+    action: '进入智库',
     url: '/pages/knowledge'
   },
   {
     index: '02',
+    label: 'Create',
     title: '灵感琢玉',
-    desc: '通过有限参数组合生成 144 种 AI 玉器方案。',
-    note: 'AI 生成方案',
+    desc: '选择材质、样式、主题和题材，生成一件 AI 玉器视觉方案。',
+    note: 'AI 辅助生成',
+    action: '开始琢玉',
     url: '/pages/design'
   },
   {
     index: '03',
+    label: 'Archive',
     title: '作品档案',
-    desc: '选择作品图，整理设计说明、传统依据和创新点。',
-    note: '设计说明',
-    url: '/pages/report'
+    desc: '把作品图、设计说明和文化依据整理成可阅读的成果档案。',
+    note: '成果整理',
+    action: '整理档案',
+    url: '/pages/report?random=1'
   }
 ];
 
@@ -99,29 +111,33 @@ const works = [
   {
     title: '冰种翡翠水滴吊坠',
     meta: '现代极简 · 水滴形',
-    src: localAsset('static/generated/material-core/ice-jade-diaozhui-modern-waterdrop.jpg')
+    src: localAsset('static/generated/material-core/ice-jade-diaozhui-modern-waterdrop.jpg'),
+    url: '/pages/report?material=ice-jade&form=diaozhui&theme=modern&subject=waterdrop'
   },
   {
     title: '和田青玉远山玉佩',
     meta: '山水意境 · 远山云水',
-    src: localAsset('static/generated/material-core/green-jade-yupei-landscape-mountain-cloud.jpg')
+    src: localAsset('static/generated/material-core/green-jade-yupei-landscape-mountain-cloud.jpg'),
+    url: '/pages/report?material=green-jade&form=yupei&theme=landscape&subject=mountain-cloud'
   },
   {
     title: '羊脂白玉观音玉佩',
     meta: '神话故事 · 观音',
-    src: localAsset('static/generated/material-core/mutton-white-yupei-myth-guanyin.jpg')
+    src: localAsset('static/generated/material-core/mutton-white-yupei-myth-guanyin.jpg'),
+    url: '/pages/report?material=mutton-white&form=yupei&theme=myth&subject=guanyin'
   },
   {
     title: '南红玛瑙锦鲤手镯',
     meta: '花鸟鱼虫 · 锦鲤',
-    src: localAsset('static/generated/material-core/red-agate-shouzhuo-huahui-koi.jpg')
+    src: localAsset('static/generated/material-core/red-agate-shouzhuo-huahui-koi.jpg'),
+    url: '/pages/report?material=red-agate&form=shouzhuo&theme=huahui&subject=koi'
   }
 ];
 
 const steps = [
   { num: 'A', title: '看真实玉器', desc: '从开放馆藏建立材质、工艺和题材的可靠参照。' },
-  { num: 'B', title: '生成设计方案', desc: '用本地 AI 素材库呈现不同组合的视觉结果。' },
-  { num: 'C', title: '整理作品档案', desc: '把图像、传统依据和创新说明整合成最终成果。' }
+  { num: 'B', title: '生成设计方案', desc: '用 AI 辅助呈现不同材质、器型和题材组合的视觉结果。' },
+  { num: 'C', title: '整理作品档案', desc: '把图像、传统依据和 AI 参与说明整合成最终成果。' }
 ];
 
 const go = (url: string) => {
@@ -149,14 +165,14 @@ const go = (url: string) => {
 }
 
 .hero {
-  min-height: 560rpx;
-  padding: 46rpx;
+  min-height: 250px;
+  padding: 30px;
   border-radius: 18rpx;
   background: #173f36;
   color: #fff;
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 430rpx;
-  gap: 42rpx;
+  grid-template-columns: minmax(0, 1fr) 330px;
+  gap: 30px;
   align-items: center;
   box-shadow: 0 20rpx 52rpx rgba(31, 70, 62, 0.18);
   box-sizing: border-box;
@@ -169,83 +185,73 @@ const go = (url: string) => {
 
 .eyebrow {
   color: #dfc58f;
-  font-size: 24rpx;
+  font-size: 16px;
   font-weight: 800;
 }
 
 .title {
-  margin-top: 14rpx;
-  font-size: 72rpx;
+  margin-top: 12px;
+  font-size: 46px;
   line-height: 1.05;
   font-weight: 900;
 }
 
 .subtitle {
-  margin-top: 22rpx;
-  max-width: 760rpx;
-  color: rgba(255, 255, 255, 0.86);
-  font-size: 29rpx;
-  line-height: 1.7;
+  margin-top: 14px;
+  max-width: 610px;
+  color: rgba(255, 255, 255, 0.88);
+  font-size: 18px;
+  line-height: 1.65;
 }
 
-.hero-actions {
-  margin-top: 34rpx;
-  display: flex;
-  gap: 16rpx;
-  flex-wrap: wrap;
-}
-
-.primary-action,
-.secondary-action {
-  height: 78rpx;
-  min-width: 180rpx;
-  padding: 0 28rpx;
-  border-radius: 999rpx;
-  font-size: 27rpx;
-  font-weight: 800;
-  line-height: 78rpx;
-}
-
-.primary-action {
-  background: #dfc58f;
-  color: #173f36;
-}
-
-.secondary-action {
-  background: rgba(255, 255, 255, 0.1);
-  color: #fff;
-}
-
-.hero-art {
-  overflow: hidden;
+.hero-flow {
+  padding: 20px;
   border-radius: 16rpx;
-  background: #e9e2d5;
-  box-shadow: 0 18rpx 42rpx rgba(0, 0, 0, 0.18);
+  background: rgba(255, 255, 255, 0.09);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
 }
 
-.hero-image {
-  width: 100%;
-  height: 430rpx;
-  display: block;
+.flow-item {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
 }
 
-.hero-art-caption {
-  padding: 22rpx 24rpx;
-  background: #fff;
+.flow-num {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(223, 197, 143, 0.2);
+  color: #dfc58f;
+  font-size: 15px;
+  font-weight: 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 40px;
 }
 
-.caption-title {
-  display: block;
-  color: #1f302b;
-  font-size: 28rpx;
+.flow-copy {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.flow-title {
+  color: #fff;
+  font-size: 18px;
   font-weight: 900;
 }
 
-.caption-desc {
-  display: block;
-  margin-top: 6rpx;
-  color: #9a7437;
-  font-size: 22rpx;
+.flow-desc {
+  margin-top: 5px;
+  color: rgba(255, 255, 255, 0.78);
+  font-size: 14px;
+  line-height: 1.5;
 }
 
 .module-grid {
@@ -256,8 +262,8 @@ const go = (url: string) => {
 }
 
 .module-card {
-  min-height: 230rpx;
-  padding: 26rpx;
+  min-height: 270rpx;
+  padding: 28rpx;
   border-radius: 14rpx;
   background: #fff;
   box-shadow: 0 12rpx 30rpx rgba(44, 53, 48, 0.08);
@@ -266,8 +272,8 @@ const go = (url: string) => {
 }
 
 .module-index {
-  width: 58rpx;
-  height: 58rpx;
+  width: 62rpx;
+  height: 62rpx;
   border-radius: 50%;
   background: #e8f2ed;
   color: #1f6b5b;
@@ -278,18 +284,25 @@ const go = (url: string) => {
   justify-content: center;
 }
 
+.module-label {
+  margin-top: 24rpx;
+  color: #9a7437;
+  font-size: 21rpx;
+  font-weight: 900;
+}
+
 .module-title {
-  margin-top: 22rpx;
+  margin-top: 8rpx;
   color: #1f302b;
-  font-size: 31rpx;
+  font-size: 32rpx;
   font-weight: 900;
 }
 
 .module-desc {
-  margin-top: 12rpx;
+  margin-top: 14rpx;
   color: #68736d;
   font-size: 24rpx;
-  line-height: 1.6;
+  line-height: 1.65;
 }
 
 .module-foot {
@@ -297,6 +310,7 @@ const go = (url: string) => {
   padding-top: 22rpx;
   display: flex;
   justify-content: space-between;
+  gap: 18rpx;
   color: #9a7437;
   font-size: 22rpx;
   font-weight: 800;
@@ -307,7 +321,7 @@ const go = (url: string) => {
 }
 
 .gallery-section {
-  margin-top: 34rpx;
+  margin-top: 38rpx;
 }
 
 .section-head {
@@ -351,11 +365,19 @@ const go = (url: string) => {
   box-shadow: 0 12rpx 30rpx rgba(44, 53, 48, 0.08);
 }
 
+.work-image-frame {
+  width: 100%;
+  height: 300px;
+  background: #ebe4d8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .work-image {
   width: 100%;
-  height: 260rpx;
+  height: 100%;
   display: block;
-  background: #e8e1d3;
 }
 
 .work-copy {
@@ -377,7 +399,7 @@ const go = (url: string) => {
 }
 
 .process-band {
-  margin-top: 34rpx;
+  margin-top: 30rpx;
   padding: 26rpx 30rpx;
   border-radius: 14rpx;
   background: #fff;
@@ -427,10 +449,11 @@ const go = (url: string) => {
 
   .hero {
     padding: 38rpx;
+    min-height: auto;
   }
 
-  .hero-image {
-    height: 520rpx;
+  .work-image-frame {
+    height: 560rpx;
   }
 }
 </style>

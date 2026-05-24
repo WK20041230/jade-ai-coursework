@@ -74,13 +74,13 @@
       </view>
 
       <view class="section">
-        <text class="section-title">AI 创新点</text>
-        <text class="section-text">{{ archive.innovation }}</text>
+        <text class="section-title">AI 参与说明</text>
+        <text class="section-text">{{ archive.aiProcess }}</text>
       </view>
     </view>
     <view v-else class="archive-empty">
       <text class="empty-title">尚未生成作品档案</text>
-      <text class="empty-text">确认当前作品后，点击“生成档案”，下方会出现完整的设计说明、传统依据和 AI 创新点。</text>
+      <text class="empty-text">确认当前作品后，点击“生成档案”，下方会出现完整的设计说明、传统依据和 AI 参与说明。</text>
     </view>
 
     <view v-if="selectorOpen" class="selector-mask" @tap="closeSelector">
@@ -134,7 +134,7 @@
               :class="{ active: item.themeIndex === themeIndex && item.subjectIndex === subjectIndex }"
               @tap="selectGalleryItem(item)"
             >
-              <image class="gallery-image" :src="item.src" mode="aspectFill" />
+              <image class="gallery-image" :src="item.src" mode="aspectFit" />
               <view class="gallery-copy">
                 <text class="gallery-name">{{ item.subject.name }}</text>
                 <text class="gallery-theme">{{ item.theme.name }}</text>
@@ -148,7 +148,8 @@
 </template>
 
 <script setup lang="ts">
-import { computed, reactive, ref } from 'vue';
+import { computed, onMounted, onUnmounted, reactive, ref } from 'vue';
+import { onLoad } from '@dcloudio/uni-app';
 
 type Material = {
   name: string;
@@ -186,7 +187,10 @@ type GalleryItem = {
   subjectIndex: number;
 };
 
-const localAsset = (path: string) => `${import.meta.env.BASE_URL}${path}`;
+type WorkQuery = Partial<Record<'material' | 'form' | 'theme' | 'subject' | 'random', string>>;
+
+const assetVersion = '20260524-full-artwork-1410';
+const localAsset = (path: string) => `${import.meta.env.BASE_URL}${path}?v=${assetVersion}`;
 
 const materials: Material[] = [
   { name: '羊脂白玉', slug: 'mutton-white', feature: '温润凝脂', design: '适合表现清雅、柔和、端庄的题材，重点在白度、细腻度与含蓄光泽。' },
@@ -217,7 +221,7 @@ const themes: Theme[] = [
     slug: 'myth',
     note: '守护叙事',
     subjects: [
-      { name: '钟馗', slug: 'zhongkui', symbol: '通过人物姿态和面部气势表达镇邪纳福。' },
+      { name: '寿星', slug: 'shoulao', symbol: '通过仙桃、灵芝、长眉和拐杖表达福寿绵长。' },
       { name: '观音', slug: 'guanyin', symbol: '以端庄面相、柔和衣纹表达慈悲与平安。' },
       { name: '哪吒', slug: 'nezha', symbol: '用飘带、武器和动态姿态表达勇气与突破。' }
     ]
@@ -249,7 +253,7 @@ const formIndex = ref(1);
 const themeIndex = ref(0);
 const subjectIndex = ref(0);
 const selectorOpen = ref(false);
-const archive = ref<{ design: string; tradition: string; innovation: string } | null>(null);
+const archive = ref<{ design: string; tradition: string; aiProcess: string } | null>(null);
 const archiveVersion = ref(0);
 
 const form = reactive({
@@ -307,7 +311,7 @@ const subjectDetail = computed(() => {
     lotus: '莲花的重点不是单朵花本身，而是花瓣、莲叶和水意之间的层次。它适合表达清雅、洁净，也适合与白玉、翡翠等清润材质结合。',
     koi: '锦鲤题材依靠鱼身曲线和水纹动势成立，适合表达顺遂、富足和流动的生命力。',
     bamboo: '竹叶题材需要线条疏密有度，竹节与叶片的方向能带出清劲、克制和文人气质。',
-    zhongkui: '钟馗题材需要力量感和辨识度，面部、须发和衣纹都要服务于镇邪纳福的守护意味。',
+    shoulao: '寿星题材的重点在祝寿语义和人物亲和感，长眉、额头、仙桃、灵芝、拐杖等元素需要清楚但不堆砌，整体气质应温和、吉祥而有古意。',
     guanyin: '观音题材更看重端庄、慈悲和安定感，面相、手势和衣纹不能过于躁动。',
     nezha: '哪吒题材适合动态表现，飘带、武器和少年姿态可以强化勇气、突破与活力。',
     'mountain-cloud': '远山云水依靠远近层叠和云气留白成立，适合表现开阔、含蓄的东方空间。',
@@ -325,19 +329,19 @@ const reportAngles = [
     name: '材质观察',
     design: '本次档案更偏向从材质观察进入作品：',
     tradition: '从传统玉器观看方式看，材质从来不是背景，而是决定题材如何成立的前提。',
-    innovation: 'AI 生成在这一角度下的价值，是快速比较不同材质对同一题材气质的改变。'
+    aiProcessLead: 'AI 生成在这一角度下的价值，是快速比较不同材质对同一题材气质的改变。'
   },
   {
     name: '造型叙事',
     design: '本次档案更偏向从造型叙事进入作品：',
     tradition: '传统玉器中的器型与纹样往往互相制约，题材必须服从佩戴、陈设或把玩的形制。',
-    innovation: 'AI 生成在这一角度下的价值，是把题材、形制和构图快速组合成可视化草案。'
+    aiProcessLead: 'AI 生成在这一角度下的价值，是把题材、形制和构图快速组合成可视化草案。'
   },
   {
     name: '网页呈现',
     design: '本次档案更偏向从网页呈现进入作品：',
     tradition: '当传统玉器进入数字页面时，观众首先接触的是图像、标题和说明之间的关系。',
-    innovation: 'AI 生成在这一角度下的价值，是让作品不仅能被观看，还能被归档、筛选和重新组织。'
+    aiProcessLead: 'AI 生成在这一角度下的价值，是让作品不仅能被观看，还能被归档、筛选和重新组织。'
   }
 ];
 
@@ -356,6 +360,93 @@ const galleryItems = computed<GalleryItem[]>(() =>
 
 function makeAssetPath(theme: Theme, subject: Subject) {
   return localAsset(`static/generated/material-core/${selectedMaterial.value.slug}-${selectedForm.value.slug}-${theme.slug}-${subject.slug}.jpg`);
+}
+
+function resetFormForCurrentWork() {
+  form.name = comboName.value;
+  form.note = `希望作品既能体现${selectedSubject.value.name}的题材寓意，也能保留${selectedMaterial.value.name}${selectedMaterial.value.feature}的材质识别度。`;
+  archive.value = null;
+}
+
+function applyWorkSelection(materialSlug: string, formSlug: string, themeSlug: string, subjectSlug: string) {
+  const nextMaterialIndex = materials.findIndex((item) => item.slug === materialSlug);
+  const nextFormIndex = forms.findIndex((item) => item.slug === formSlug);
+  const nextThemeIndex = themes.findIndex((item) => item.slug === themeSlug);
+  const nextSubjectIndex = nextThemeIndex >= 0
+    ? themes[nextThemeIndex].subjects.findIndex((item) => item.slug === subjectSlug)
+    : -1;
+
+  if (nextMaterialIndex >= 0) {
+    materialIndex.value = nextMaterialIndex;
+  }
+  if (nextFormIndex >= 0) {
+    formIndex.value = nextFormIndex;
+  }
+  if (nextThemeIndex >= 0) {
+    themeIndex.value = nextThemeIndex;
+  }
+  if (nextSubjectIndex >= 0) {
+    subjectIndex.value = nextSubjectIndex;
+  }
+  resetFormForCurrentWork();
+}
+
+function applyRandomWork() {
+  materialIndex.value = Math.floor(Math.random() * materials.length);
+  formIndex.value = Math.floor(Math.random() * forms.length);
+  themeIndex.value = Math.floor(Math.random() * themes.length);
+  subjectIndex.value = Math.floor(Math.random() * themes[themeIndex.value].subjects.length);
+  resetFormForCurrentWork();
+}
+
+function applyQueryOptions(options?: WorkQuery) {
+  if (options?.random === '1') {
+    applyRandomWork();
+    return;
+  }
+
+  if (options?.material || options?.form || options?.theme || options?.subject) {
+    applyWorkSelection(
+      String(options.material || selectedMaterial.value.slug),
+      String(options.form || selectedForm.value.slug),
+      String(options.theme || selectedTheme.value.slug),
+      String(options.subject || selectedSubject.value.slug)
+    );
+  }
+}
+
+function getHashQueryOptions(): WorkQuery {
+  if (typeof window === 'undefined') return {};
+  const queryText = window.location.hash.split('?')[1] || window.location.search.slice(1);
+  const params = new URLSearchParams(queryText);
+  return {
+    material: params.get('material') || undefined,
+    form: params.get('form') || undefined,
+    theme: params.get('theme') || undefined,
+    subject: params.get('subject') || undefined,
+    random: params.get('random') || undefined
+  };
+}
+
+onLoad((options) => {
+  applyQueryOptions(options as WorkQuery);
+});
+
+onMounted(() => {
+  applyQueryOptions(getHashQueryOptions());
+  if (typeof window !== 'undefined') {
+    window.addEventListener('hashchange', handleHashChange);
+  }
+});
+
+onUnmounted(() => {
+  if (typeof window !== 'undefined') {
+    window.removeEventListener('hashchange', handleHashChange);
+  }
+});
+
+function handleHashChange() {
+  applyQueryOptions(getHashQueryOptions());
 }
 
 const openSelector = () => {
@@ -395,7 +486,7 @@ const makeArchive = (showToast = true) => {
   archive.value = {
     design: `${angle.design}${archiveName.value}以${selectedMaterial.value.name}为主要材质，采用${selectedForm.value.name}形制，题材选择“${selectedSubject.value.name}”。${materialDetail.value}${formDetail.value}${subjectDetail.value}因此这件作品的分析重点不是单纯判断“像不像玉”，而是看材质语言、题材寓意和形制功能是否互相支持。${note ? `补充设想是：${note}` : ''}`,
     tradition: `${angle.tradition}${selectedTheme.value.name}为作品提供了文化语义，${selectedSubject.value.name}提供了图像核心。${themeDetail.value}${subjectDetail.value}如果把它放回传统玉器系统中理解，它既可以对应佩饰、陈设或把玩器的审美传统，也能说明玉器题材并不是孤立符号，而是由材质、器型、工艺和寓意共同构成。`,
-    innovation: `${angle.innovation}这个作品档案把 AI 图像、参数组合和文字说明放在同一页面中，形成“选择作品 - 生成档案 - 阅读依据”的流程。与单张 AI 图片相比，它更强调可解释性：用户能看到作品为什么采用${selectedMaterial.value.name}，为什么适合${selectedForm.value.name}，以及${selectedSubject.value.name}如何连接到${selectedTheme.value.name}。页面使用本地预生成图像，不依赖实时接口，因此适合离线提交和长期展示；同时，不同作品会生成不同分析文本，避免所有档案只套用同一段说明。`
+    aiProcess: `${angle.aiProcessLead}这个作品档案把 AI 图像、参数选择和文字说明放在同一页面中，形成“选择作品 - 生成档案 - 阅读依据”的展示流程。与单张 AI 图片相比，它更强调可解释性：观众能看到作品为什么采用${selectedMaterial.value.name}，为什么适合${selectedForm.value.name}，以及${selectedSubject.value.name}如何连接到${selectedTheme.value.name}。AI 在这里主要承担视觉方案生成和方案比较的作用，最终说明仍围绕玉器材质、工艺逻辑和文化寓意展开。`
   };
   if (showToast) {
     uni.showToast({ title: '档案已生成', icon: 'success' });
@@ -411,6 +502,7 @@ const makeArchive = (showToast = true) => {
     linear-gradient(90deg, rgba(31, 107, 91, 0.035), rgba(31, 107, 91, 0) 18%, rgba(154, 116, 55, 0.05)),
     #f6f4ef;
   box-sizing: border-box;
+  overflow-x: hidden;
 }
 
 .hero,
@@ -432,11 +524,14 @@ const makeArchive = (showToast = true) => {
   justify-content: space-between;
   gap: 24rpx;
   box-shadow: 0 18rpx 46rpx rgba(31, 70, 62, 0.16);
+  box-sizing: border-box;
 }
 
 .hero-copy {
   display: flex;
   flex-direction: column;
+  min-width: 0;
+  width: 100%;
 }
 
 .eyebrow {
@@ -457,6 +552,9 @@ const makeArchive = (showToast = true) => {
   color: rgba(255, 255, 255, 0.84);
   font-size: 26rpx;
   line-height: 1.6;
+  overflow-wrap: anywhere;
+  white-space: normal;
+  word-break: break-all;
 }
 
 .hero-action,
@@ -478,7 +576,7 @@ const makeArchive = (showToast = true) => {
 
 .showcase {
   display: grid;
-  grid-template-columns: minmax(0, 1.18fr) minmax(360rpx, 0.82fr);
+  grid-template-columns: minmax(0, 1.22fr) minmax(380rpx, 0.78fr);
   gap: 24rpx;
   align-items: stretch;
 }
@@ -494,24 +592,28 @@ const makeArchive = (showToast = true) => {
 
 .art-stage {
   position: relative;
-  min-height: 650rpx;
+  min-height: 760rpx;
+  padding: 34rpx;
   overflow: hidden;
   background: #e9e2d5;
+  border: 1px solid #e0d5c4;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
+  gap: 20rpx;
+  box-sizing: border-box;
 }
 
 .work-image {
   width: 100%;
-  height: 650rpx;
+  max-width: 760rpx;
+  height: 760rpx;
+  max-height: 72vh;
   display: block;
 }
 
 .stage-hint {
-  position: absolute;
-  left: 28rpx;
-  bottom: 28rpx;
   padding: 12rpx 18rpx;
   border-radius: 999rpx;
   background: rgba(23, 63, 54, 0.88);
@@ -521,6 +623,8 @@ const makeArchive = (showToast = true) => {
 
 .side-panel {
   padding: 30rpx;
+  border-top: 5rpx solid #dfc58f;
+  box-sizing: border-box;
 }
 
 .panel-kicker {
@@ -607,7 +711,8 @@ const makeArchive = (showToast = true) => {
 
 .archive {
   margin-top: 26rpx;
-  padding: 30rpx;
+  padding: 34rpx;
+  box-sizing: border-box;
 }
 
 .archive-empty {
@@ -673,7 +778,7 @@ const makeArchive = (showToast = true) => {
 .archive-grid {
   margin-top: 24rpx;
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 16rpx;
 }
 
@@ -700,7 +805,9 @@ const makeArchive = (showToast = true) => {
 
 .section {
   margin-top: 24rpx;
-  padding-top: 22rpx;
+  padding: 24rpx;
+  border-radius: 12rpx;
+  background: #fbfaf7;
   border-top: 1px solid #eee8dc;
 }
 
@@ -715,8 +822,8 @@ const makeArchive = (showToast = true) => {
   display: block;
   margin-top: 12rpx;
   color: #4f5b56;
-  font-size: 25rpx;
-  line-height: 1.8;
+  font-size: 26rpx;
+  line-height: 1.85;
   text-align: justify;
 }
 
@@ -784,6 +891,7 @@ const makeArchive = (showToast = true) => {
   padding: 18rpx;
   border-radius: 14rpx;
   background: #f7f4ec;
+  border: 1px solid #eadfca;
   margin-bottom: 22rpx;
 }
 
@@ -854,10 +962,12 @@ const makeArchive = (showToast = true) => {
   border-radius: 12rpx;
   border: 2rpx solid transparent;
   background: #f7f4ec;
+  box-shadow: 0 8rpx 20rpx rgba(44, 53, 48, 0.06);
 }
 
 .gallery-card.active {
   border-color: #1f6b5b;
+  background: #fff;
 }
 
 .gallery-image {
@@ -886,17 +996,29 @@ const makeArchive = (showToast = true) => {
 }
 
 @media screen and (max-width: 860px) {
+  .hero {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .hero-action {
+    width: 100%;
+    flex-basis: auto;
+  }
+
   .showcase,
   .archive-grid {
     grid-template-columns: 1fr;
   }
 
   .art-stage {
-    min-height: 520rpx;
+    min-height: 680rpx;
+    padding: 22rpx;
   }
 
   .work-image {
-    height: 520rpx;
+    height: 680rpx;
+    max-height: none;
   }
 
   .gallery-grid {
@@ -918,15 +1040,6 @@ const makeArchive = (showToast = true) => {
 }
 
 @media screen and (max-width: 420px) {
-  .hero {
-    align-items: flex-start;
-    flex-direction: column;
-  }
-
-  .hero-action {
-    width: 100%;
-  }
-
   .selector-mask {
     padding: 20rpx;
   }

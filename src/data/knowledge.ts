@@ -178,7 +178,7 @@ export const knowledgeCategories: KnowledgeCategory[] = [
         history:
           '红色玉石在中国文化中常与吉祥、热烈、护佑和礼赠联系在一起。南红在近现代文玩和首饰设计中辨识度较高。',
         imageReading:
-          '这件玛瑙杯有明显的天然色带和温暖色调，能帮助说明玛瑙类材料的“胶质感”和纹理变化。用于南红设计时，可以进一步把红色转化为钟馗、哪吒、瑞兽等更有力量感的题材。',
+          '这件玛瑙杯有明显的天然色带和温暖色调，能帮助说明玛瑙类材料的“胶质感”和纹理变化。用于南红设计时，可以进一步把红色转化为寿星、哪吒、瑞兽等更有吉祥感的题材。',
         appraisal: ['看红色是否沉稳饱满', '看裂纹和杂质', '看胶质感与润度', '看颜色分区是否适合题材'],
         examples: [
           {
@@ -248,7 +248,7 @@ export const knowledgeCategories: KnowledgeCategory[] = [
         tag: '因材施艺',
         desc: '利用天然颜色、皮色和纹理转化为画面内容。',
         points: ['顺应原料', '色形结合', '避裂取势', '主题自然'],
-        image: img('static/knowledge/clever-color-cup-stand.jpg', '带黑色纹理白玉杯座', 'Oval Cup Stand with Animal Masks', '清乾隆时期白玉杯座，带天然黑色纹理和阴刻装饰，适合说明色带如何服务器物气质。', cma, 'https://www.clevelandart.org/art/1989.327'),
+        image: img('static/knowledge/clever-color-cup-stand.jpg', '带黑色纹理白玉杯座', 'Oval Cup Stand with Animal Masks', '清乾隆时期白玉杯座，带天然黑色纹理和阴刻装饰，适合说明色带如何服务于器物气质。', cma, 'https://www.clevelandart.org/art/1989.327'),
         detail: '俏色巧雕不是把颜色差异当作缺陷处理，而是把天然色带、皮色、沁色或杂色转化为题材的一部分。好的俏色作品会让人觉得图案像是从材料中自然生长出来的。',
         history: '俏色巧雕与籽料、带皮料、多色玉料关系密切，体现了传统玉雕中“相料、审料、顺料”的设计思维。',
         imageReading: '这件杯座保留并利用了玉料中的黑色纹理。它适合说明“俏色”并不一定是鲜艳对比，也可以是把天然斑纹组织进器物气质中，让材料的个性成为设计的一部分。',
@@ -314,9 +314,9 @@ export const knowledgeCategories: KnowledgeCategory[] = [
         desc: '以龙、螭虎、兽面等形象表达权威、守护和祥瑞。',
         points: ['护佑', '祥瑞', '动势强烈', '适合佩饰'],
         image: img('static/knowledge/lacma-dragon-pendant-peishi.jpg', '龙形玉佩饰', 'Dragon Pendant (Peishi)', '中国龙形玉佩，龙身卷曲并形成开口空间，适合观察佩饰中的动势、线条连贯和护佑寓意。', lacma, 'https://collections-images.lacma.org/remote_images/ma-40988-O3.jpg'),
-        detail: '龙纹瑞兽是玉器中非常稳定的守护类题材。它不依赖具体人物故事，而是通过龙身卷曲、兽面张力、爪角变化和穿孔结构来表现力量感。相比钟馗，龙纹和瑞兽的开放馆藏玉器图源更充分，也更适合在课程作业中直接观察真实玉器的雕工。',
+        detail: '龙纹瑞兽是玉器中非常稳定的守护类题材。它不依赖具体人物故事，而是通过龙身卷曲、兽面张力、爪角变化和穿孔结构来表现力量感。相比过于民俗化的驱邪人物，龙纹、瑞兽和寿星等题材的开放馆藏图源更充分，也更适合在课程作业中直接观察真实玉器的雕工。',
         history: '龙、螭、虎、兽面等形象很早就进入玉器系统，常见于佩饰、带钩、玉璧、玉牌和礼仪器物。它们既有装饰功能，也承担身份、护佑、祥瑞和权威象征。',
-        imageReading: '这件龙形玉佩饰的优势在于轮廓清楚、通透部位明显，能直接说明玉佩如何把“神话力量”转化为可佩戴的曲线结构。设计页中的钟馗、哪吒等守护题材，也可以借鉴这种强动势和护佑气质。',
+        imageReading: '这件龙形玉佩饰的优势在于轮廓清楚、通透部位明显，能直接说明玉佩如何把“神话力量”转化为可佩戴的曲线结构。设计页中的寿星、哪吒等神话人物题材，也可以借鉴这种把人物寓意转化为器物轮廓和装饰节奏的方法。',
         appraisal: ['看龙身线条是否连贯', '看穿孔和薄处是否安全', '看兽面或爪角是否有力量感', '看题材是否与材质颜色协调'],
         examples: [
           { name: '螭虎纹玉佩', note: '局部高起和低伏关系清楚，适合说明瑞兽题材中的力量感和佩饰结构。', image: img('static/knowledge/lacma-chimera-pendant.webp', '螭虎纹玉佩', 'Chimera Pendant', '中国玉佩饰，动物纹样与圆形孔位结合，适合观察高低层次和佩戴结构。', lacma, 'https://collections.lacma.org/object/69787') },
